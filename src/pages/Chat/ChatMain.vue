@@ -43,6 +43,7 @@ import ChatDetail, { IMessages } from './chatDetail.vue';
 import axios from 'axios';
 import ip from '@/utils/ip';
 import * as uuid from 'uuid'
+import { Ref, ref, VNode, h } from 'vue';
 let userStore = useUserStore();
 let messages: Ref<IMessages[]> = ref([]);
 

@@ -7,7 +7,8 @@ import hljs from 'highlight.js/lib/core'
 import ini from 'highlight.js/lib/languages/ini'
 import nginx from 'highlight.js/lib/languages/nginx'
 import powershell from 'highlight.js/lib/languages/powershell'
-import { NLoadingBarProvider,NMessageProvider,NConfigProvider,NDialogProvider } from 'naive-ui';
+import { NLoadingBarProvider,NMessageProvider,NConfigProvider,NDialogProvider, darkTheme, lightTheme, useLoadingBar } from 'naive-ui';
+import { computed, defineComponent, h, onMounted, onUnmounted,watch } from 'vue';
 
 hljs.registerLanguage('ini', ini)
 hljs.registerLanguage('nginx', nginx)

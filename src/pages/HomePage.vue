@@ -68,7 +68,7 @@ import { useStyleStore } from '@/stores/style';
 // 获取登录信息
 import { useUserStore } from '@/stores/user';
 import ip from '@/utils/ip';
-import { computed, ref } from 'vue';
+import { computed, nextTick, onMounted, ref } from 'vue';
 
 const userStore = useUserStore();
 const userInfo = userStore.userInfo;

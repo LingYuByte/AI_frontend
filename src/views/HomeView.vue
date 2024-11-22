@@ -21,6 +21,7 @@ import { useLayoutStore } from '@/stores/useLayout';
 import { useScreenStore } from '@/stores/useScreen';
 import { storeToRefs } from 'pinia';
 import HeaderComponent from '@/components/HeaderComponent.vue';
+import { computed } from 'vue';
 // 菜单适配手机端，自动隐藏sider
 const screenStore = useScreenStore();
 const { isHidden } = storeToRefs(screenStore);

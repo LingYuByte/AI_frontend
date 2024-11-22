@@ -46,7 +46,7 @@ import { SettingsOutline } from '@vicons/ionicons5'
 import { useThemeStore } from '@/stores/theme';
 import { useScreenStore } from '@/stores/useScreen';
 import { storeToRefs } from 'pinia';
-import { NAvatar, NText, NIcon, DropdownOption, type DrawerPlacement } from 'naive-ui'
+import { NAvatar, NText, NIcon, DropdownOption, type DrawerPlacement, useMessage } from 'naive-ui'
 import { useRouter } from 'vue-router';
 import { computedMenuOptions } from './Options/Menu'
 import {
@@ -56,6 +56,7 @@ import {
 } from '@vicons/ionicons5'
 // 获取登录信息
 import { useUserStore } from '@/stores/user';
+import { Component, h, ref } from 'vue';
 
 const userStore = useUserStore();
 const userInfo = userStore.userInfo;

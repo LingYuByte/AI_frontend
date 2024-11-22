@@ -112,10 +112,12 @@ import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 import axios from 'axios';
 import {
-    FormInst
+    FormInst,
+    useMessage
 } from 'naive-ui'
 import ip from '@/utils/ip';
 import { SHA512 } from 'crypto-js';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 
 const loginLoading = ref(false);
 

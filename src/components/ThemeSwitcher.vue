@@ -46,7 +46,7 @@
 </template>
 
 <script lang="ts" setup>
-import { CSSProperties } from 'vue';
+import { CSSProperties, ref, watch } from 'vue';
 import { useThemeStore } from '@/stores/theme';
 import { Sparkles, Sunny } from '@vicons/ionicons5';
 
