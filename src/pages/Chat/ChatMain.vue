@@ -36,7 +36,7 @@
 </template>
 
 <script lang="tsx" setup>
-import { NSplit, NGrid, NGridItem, NSelect, SelectOption, NPopover, NButton, NTooltip } from 'naive-ui'
+import {  NGrid, NGridItem, NSelect, SelectOption,  NTooltip } from 'naive-ui'
 // 获取登录信息
 import { useUserStore } from '@/stores/user';
 import ChatDetail, { IMessages } from './chatDetail.vue';
@@ -45,9 +45,7 @@ import ip from '@/utils/ip';
 import * as uuid from 'uuid'
 let userStore = useUserStore();
 let messages: Ref<IMessages[]> = ref([]);
-function encode(s: string) {
-    return s.replace(/\\/g, `\\\\`);
-}
+
 function sendMessage(value: string) {
     let password = userStore.userInfo?.password;
 

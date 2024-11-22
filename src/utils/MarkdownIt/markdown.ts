@@ -1,5 +1,5 @@
 import MarkdownIt from "markdown-it";
-import highlight from 'highlight.js'
+import highlight from 'highlight.js/lib/core'
 import 'highlight.js/styles/atom-one-light.min.css'
 import mathjax from 'markdown-it-mathjax3'
 import './style.css'

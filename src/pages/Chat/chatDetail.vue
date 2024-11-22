@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { render } from '@/utils/MarkdownIt/markdown'
-import { ref, Ref, defineProps } from 'vue';
+import { ref, defineProps } from 'vue';
 import { NSplit, NGrid, NGridItem, NButton } from 'naive-ui'
 export interface IMessages {
     id: string,
@@ -10,7 +10,7 @@ export interface IMessages {
 const props = defineProps<{
     sendMessage: (value: string) => void
 }>()
-const model = defineModel<IMessages[]>('messages', {
+defineModel<IMessages[]>('messages', {
     required: true,
     default: () => []
 })

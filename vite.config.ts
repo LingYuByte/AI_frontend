@@ -1,37 +1,10 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
-import AutoImport from 'unplugin-auto-import/vite';
-import Components from 'unplugin-vue-components/vite'
-import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 // https://vite.dev/config/
 export default defineConfig({
     plugins: [vue(),
-        AutoImport({
-            imports: [
-                'vue',
-                {
-                    'naive-ui': [
-                        'useMessage',
-                        'useLoadingBar',
-                        'lightTheme',
-                        'darkTheme',
-                        'useDialog',
-                        'useNotification'
-                    ]
-                }
-            ],
-            dts: 'src/auto-imports.d.ts',
-            eslintrc: {
-                enabled: true,
-                filepath: './.eslintrc-auto-import.json',
-                globalsPropValue: true,
-            },
-        }),
-        Components({
-            resolvers: [NaiveUiResolver()]
-        }),
         vueJsx()
     ], resolve: {
         alias: {

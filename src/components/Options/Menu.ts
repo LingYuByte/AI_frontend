@@ -1,34 +1,13 @@
 import { h, Component } from 'vue';
 import { RouterLink } from 'vue-router';
 import { NIcon } from 'naive-ui';
-import { useUserStore } from '@/stores/user';
 import {
-    StatsChartOutline,
-    DocumentTextOutline,
-    CloudDownloadOutline,
     GridOutline,
     ListOutline,
     HomeOutline,
     PersonCircleOutline,
-    DocumentsOutline,
     ExtensionPuzzleOutline,
-    InformationCircleOutline,
-    EllipsisHorizontalCircleOutline,
-    LinkOutline,
-    PrismOutline,
-    PricetagOutline,
-    PlanetOutline,
-    KeyOutline,
-    ShieldCheckmarkOutline,
-    PieChartOutline,
-    BrowsersOutline,
-    GiftOutline,
-    PeopleOutline,
-    ConstructOutline,
-    ListCircleOutline,
-    ServerOutline,
-    BanOutline,
-    BagHandleOutline
+
 } from '@vicons/ionicons5';
 
 

@@ -1,30 +1,45 @@
 {
     "compilerOptions": {
-        "module": "CommonJS",
-        "allowSyntheticDefaultImports": true,
-        "moduleResolution": "Node",
-        "esModuleInterop": true,
+        "target": "ESNext",
+        "useDefineForClassFields": true,
+        "module": "ESNext",
         "lib": [
             "ES2023",
-            "DOM"
-        ]
-    },
-    "ts-node": {
-        "compilerOptions": {
-            "module": "CommonJS"
-        },
-        "transpileOnly": true,
-        "files": true,
+            "DOM",
+            "DOM.Iterable"
+        ],
+        "skipLibCheck": true,
+        /* Bundler mode */
+        "moduleResolution": "bundler",
+        "allowImportingTsExtensions": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        "jsx": "preserve",
+        /* Linting */
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": false,
+        "baseUrl": ".",
         "paths": {
             "@/*": [
                 "./src/*"
+            ],
+            "~/*": [
+                "./*"
             ]
         }
     },
     "include": [
-        "./*.ts",
-        "./**/*.ts",
-        "./*.d.ts",
-        "./*.mjs"
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "src/**/*.vue"
+    ],
+    "references": [
+        {
+            "path": "./tsconfig.node.json"
+        }
     ]
 }

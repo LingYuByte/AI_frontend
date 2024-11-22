@@ -65,10 +65,10 @@ import { CheckmarkCircle } from '@vicons/ionicons5';
 import axios from 'axios';
 // 根据主题自适应样式背景颜色
 import { useStyleStore } from '@/stores/style';
-import { useRouter } from 'vue-router';
 // 获取登录信息
 import { useUserStore } from '@/stores/user';
 import ip from '@/utils/ip';
+import { computed, ref } from 'vue';
 
 const userStore = useUserStore();
 const userInfo = userStore.userInfo;
@@ -77,7 +77,6 @@ const loadingTest = ref(true)
 const loadingPanelInfo = ref(true)
 const loadingTrafficInfo = ref(true)
 
-const dialog = useDialog()
 
 const styleStore = useStyleStore();
 const cardStyle = computed(() => styleStore.getCardStyle());
@@ -242,8 +241,8 @@ interface ApiDataItem {
 const updateChart = (apiData: ApiDataItem[]) => {
     const chartDom = document.getElementById('main');
     if (chartDom) {
-        const myChart = echarts.init(chartDom);
-        const myChart2 = echarts.init(document.getElementById('usage'));
+        const myChart = echarts.init(chartDom as HTMLDivElement);
+        const myChart2 = echarts.init(document.getElementById('usage') as HTMLDivElement);
         // 将 API 返回的数据单位从字节转换为 MB
         const times = apiData.map(item => {
             return new Date(item.time).getMonth() + 1 + '-' + new Date(item.time).getDate();
@@ -306,13 +305,10 @@ const updateChart = (apiData: ApiDataItem[]) => {
                             }
                         ])
                     },
-                    emphasis: {
-                        focus: 'series'
-                    },
                 },
             ]
         };
-        const option2: echarts.EChartsOption = {
+        const option2: echarts.EChartsOption= {
             title: {
                 text: '用量统计',
                 textStyle: {
@@ -329,14 +325,16 @@ const updateChart = (apiData: ApiDataItem[]) => {
             },
             xAxis: {
                 data: times,
+                
             },
             yAxis: {
-                type: 'value',
+                type: 'value' as 'value',
                 axisLabel: {
                     formatter: '{value}',
                     color: themeVars.value.textColorBase
                 }
             },
+        
             series: [
                 {
                     name: '输入token',
@@ -350,11 +348,15 @@ const updateChart = (apiData: ApiDataItem[]) => {
                     type: 'bar',
                     data: outputTokens,
                     stack: 'x',
-                    barWidth: '40%'
+                    barWidth: '40%',
+                    
                 },
+                
             ]
         };
+        // @ts-ignore
         myChart.setOption(option);
+        // @ts-ignore
         myChart2.setOption(option2);
     } else {
         console.error('[首页]找不到id为“main”(流量统计面积折线图)的元素。');
