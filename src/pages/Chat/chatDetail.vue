@@ -75,10 +75,6 @@ function handleClickClose() {
                 </div>
             </template>
         </NSplit>
-
-
-
-
     </div>
 </template>
 <style>

@@ -18,6 +18,7 @@
 
 <script lang="ts" setup>
 import MenuComponent from '@/components/Options/Menu'
+import { NLayout,NLayoutHeader,NLayoutSider, } from 'naive-ui';
 import { useLayoutStore } from '@/stores/useLayout';
 import { useScreenStore } from '@/stores/useScreen';
 import { storeToRefs } from 'pinia';

@@ -30,13 +30,13 @@
 </n-split>
 <div>
 </div> -->
-            </NGridItem>>
+            </NGridItem>
         </NGrid>
     </n-card>
 </template>
 
 <script lang="tsx" setup>
-import {  NGrid, NGridItem, NSelect, SelectOption,  NTooltip } from 'naive-ui'
+import {  NCard,NGrid, NGridItem, NSelect, SelectOption,  NTooltip,NBackTop } from 'naive-ui'
 // 获取登录信息
 import { useUserStore } from '@/stores/user';
 import ChatDetail, { IMessages } from './chatDetail.vue';

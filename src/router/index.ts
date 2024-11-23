@@ -25,6 +25,7 @@ const routes: Array<RouteRecordRaw> = [
             }
         ]
     },
+    
     {
         path: '/',
         name: 'AI 功能',
