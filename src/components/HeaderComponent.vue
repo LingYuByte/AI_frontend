@@ -46,9 +46,10 @@ import { SettingsOutline } from '@vicons/ionicons5'
 import { useThemeStore } from '@/stores/theme';
 import { useScreenStore } from '@/stores/useScreen';
 import { storeToRefs } from 'pinia';
-import { NAvatar, NText, NIcon, DropdownOption, type DrawerPlacement, useMessage } from 'naive-ui'
+import { NPopover,NPerformantEllipsis,NDropdown,NButton,NAvatar, NText, NIcon, DropdownOption, type DrawerPlacement, useMessage,NSpace,NDrawerContent,NDrawer } from 'naive-ui'
 import { useRouter } from 'vue-router';
 import { computedMenuOptions } from './Options/Menu'
+import ThemeSwitcher from './ThemeSwitcher.vue';
 import {
     PersonCircleOutline as UserIcon,
     LogOutOutline as LogoutIcon,
