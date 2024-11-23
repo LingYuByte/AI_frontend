@@ -11,7 +11,6 @@ interface UserInfo {
 export const useUserStore = defineStore('user', () => {
     const userInfo = ref<UserInfo | null>(null);
     const setUser = (info: UserInfo, duration = 'permanent') => {
-        userInfo.value!.userimg = `https://www.loliapi.com/acg/pp/`;
         const expiry = duration === '1d' ? new Date().getTime() + 86400000 : null;
         const dataToStore = JSON.stringify({ ...info, expiry });
 
@@ -22,6 +21,7 @@ export const useUserStore = defineStore('user', () => {
         }
 
         userInfo.value = info;
+        userInfo.value!.userimg = info.userimg??`https://www.loliapi.com/acg/pp/`;
     };
 
     const loadUser = () => {

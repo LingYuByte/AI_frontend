@@ -373,7 +373,8 @@ const handleValidateButtonClick = async () => {
             const userInfo = {
                 id: response.data.data.id,
                 username: response.data.data.username,
-                password: response.data.data.password
+                password: response.data.data.password,
+                userimg: response.data.data.userimg
             };
 
             const storageDuration = keepLoggedIn.value ? 'permanent' : '1d';

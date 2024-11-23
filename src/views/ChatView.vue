@@ -17,6 +17,7 @@
 </template>
 
 <script lang="ts" setup>
+import MenuComponent from '@/components/Options/Menu'
 import { useLayoutStore } from '@/stores/useLayout';
 import { useScreenStore } from '@/stores/useScreen';
 import { storeToRefs } from 'pinia';

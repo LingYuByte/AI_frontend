@@ -144,3 +144,5 @@ export const computedMenuOptionsUser = computed(() => [{
 export const computedMenuOptions = computed(() => {
     return computedMenuOptionsUser.value;
 });
+
+export default computedMenuOptions;

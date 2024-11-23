@@ -1,7 +1,7 @@
 import MarkdownIt from "markdown-it";
 import highlight from 'highlight.js/lib/core'
 import 'highlight.js/styles/atom-one-light.min.css'
-import mathjax from 'markdown-it-mathjax3'
+import katex from '@iktakahiro/markdown-it-katex'
 import './style.css'
 const markdownit = new MarkdownIt({
     html: true, highlight: function (str, lang) {
@@ -19,7 +19,7 @@ const markdownit = new MarkdownIt({
             return str;
         }
     }
-}).use(mathjax)
+}).use(katex)
 function render(value: string, _timer: number = 200, renderBlock?: any[]) {
     const res = markdownit.render(value);
     const realRenderBlock:Element[] = [];
