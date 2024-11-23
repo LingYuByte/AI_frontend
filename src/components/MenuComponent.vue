@@ -4,6 +4,7 @@
 </template>
 
 <script lang="ts" setup>
+import { NMenu } from 'naive-ui';
 import { ref, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useLayoutStore } from '@/stores/useLayout';

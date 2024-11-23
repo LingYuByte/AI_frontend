@@ -17,6 +17,7 @@
 </template>
 
 <script lang="ts" setup>
+import { NLayout, NLayoutHeader, NLayoutSider } from 'naive-ui';
 import MenuComponent from '@/components/MenuComponent.vue';
 import { useLayoutStore } from '@/stores/useLayout';
 import { useScreenStore } from '@/stores/useScreen';
