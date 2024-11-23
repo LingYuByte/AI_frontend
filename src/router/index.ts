@@ -4,6 +4,10 @@ import { useUserStore } from '../stores/user';
 
 const routes: Array<RouteRecordRaw> = [
     {
+        path: '/sign',
+        component: () => import('@/views/SignView.vue'),
+    },
+    {
         path: '/',
         redirect: '/home',
         component: () => import('@/views/HomeView.vue'),
@@ -21,6 +25,7 @@ const routes: Array<RouteRecordRaw> = [
             }
         ]
     },
+    
     {
         path: '/',
         name: 'AI 功能',
