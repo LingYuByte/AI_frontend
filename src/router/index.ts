@@ -3,11 +3,11 @@ import { useProviderStore } from '../stores/provider'
 import { useUserStore } from '../stores/user';
 
 const routes: Array<RouteRecordRaw> = [
-    {
+     {
         path: '/sign',
+        name: `登录`,
         component: () => import('@/views/SignView.vue'),
-    },
-    {
+    },{
         path: '/',
         redirect: '/home',
         component: () => import('@/views/HomeView.vue'),
@@ -47,7 +47,7 @@ const routes: Array<RouteRecordRaw> = [
 ]
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHistory(`/`),
     routes,
 });
 

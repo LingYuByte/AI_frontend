@@ -4,9 +4,8 @@ import router from './router'
 import { createPinia } from 'pinia'
 import '@/assets/styles/themes.css'
 import '@/assets/styles/global.scss'
-import naive from 'naive-ui'
 const app = createApp(App)
-app.use(naive);
+import 'naive-ui/'
 // 通用字体
 import 'vfonts/Lato.css'
 // 等宽字体
@@ -46,6 +45,5 @@ router.beforeEach((to, _from, next) => {
 });
 
 app.use(createPinia());
-app.use(naive);
 app.use(router);
 app.mount('#app');
