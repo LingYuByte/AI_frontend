@@ -35,17 +35,6 @@ export const computedMenuOptionsUser = computed(() => [{
     }
 },
 {
-    label: () => h(
-        RouterLink,
-        {
-            to: { name: '个人资料' }
-        },
-        { default: () => '个人资料' }
-    ),
-    key: '个人资料',
-    icon: renderIcon(PersonCircleOutline)
-},
-{
     label: 'AI 功能',
     key: 'AI 功能',
     "aria-expanded" : true,

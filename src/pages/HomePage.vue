@@ -59,7 +59,7 @@
 <script lang="ts" setup>
 import { useScreenStore } from '@/stores/useScreen';
 import { storeToRefs } from 'pinia';
-import { useThemeVars, NSkeleton, NCard,NBackTop,NFlex,NGrid,NGi,NIcon,NStatistic } from 'naive-ui';
+import { useThemeVars, NSkeleton, NCard,NBackTop,NFlex,NGrid,NGi,NIcon,NStatistic,NNumberAnimation,NSpace } from 'naive-ui';
 import * as echarts from 'echarts';
 import { CheckmarkCircle } from '@vicons/ionicons5';
 import axios from 'axios';
