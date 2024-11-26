@@ -55,7 +55,7 @@ import {
     FormInst,
     useMessage, NCard, NGridItem, 
     NFlex, NGrid, NFormItem, NInput, 
-    NAlert, NCheckbox, NButton,NLayout,NLayoutContent,NGi,NForm
+    NAlert, NCheckbox, NButton,NLayout,NLayoutContent,NForm
 } from 'naive-ui'
 import ip from '@/utils/ip';
 import { SHA512 } from 'crypto-js';
