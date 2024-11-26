@@ -3,11 +3,12 @@ import { useProviderStore } from '../stores/provider'
 import { useUserStore } from '../stores/user';
 
 const routes: Array<RouteRecordRaw> = [
-     {
+    {
         path: '/sign',
         name: `登录`,
         component: () => import('@/views/SignView.vue'),
-    },{
+    },
+    {
         path: '/',
         redirect: '/home',
         component: () => import('@/views/HomeView.vue'),
@@ -17,29 +18,39 @@ const routes: Array<RouteRecordRaw> = [
                 name: '首页',
                 component: () => import('@/pages/HomePage.vue'),
                 meta: {
-                    title: 'LingYu Byte AI - 控制台首页',
-                    keywords: 'LingYu Byte AI, 内网穿透, 端口映射, frp, 免费frp, 映射',
-                    description: 'LingYu Byte AI控制台首页，您可以在这里查看您的LingYu Byte AI账户预览',
+                    title: '控制台首页 - LingYu Byte AI',
+                    keywords: 'LingYu Byte AI',
+                    description: 'LingYu Byte AI控制台首页，您可以在这里查看您的LingYu Byte AI 账户预览',
                     requiresAuth: true,
                 }
             }
         ]
     },
-    
+
     {
         path: '/',
         name: 'AI 功能',
         component: () => import('@/views/ChatView.vue'),
-        children:[
+        children: [
             {
                 path: '/chat',
                 name: 'AI 对话',
                 component: () => import('@/pages/Chat/ChatMain.vue'),
                 meta: {
-                    title: 'LingYu Byte AI - 控制台首页',
-                    keywords: 'LingYu Byte AI, ChatGPT',
+                    title: 'AI对话 - LingYu Byte AI',
+                    keywords: 'LingYu Byte AI, ChatGPT, AI, AI对话',
                     requiresAuth: true,
-                }
+                },
+            },
+            {
+                path: "tts",
+                name: "文本转语音",
+                component: () => import('@/pages/Chat/ttsMain.vue'),
+                meta: {
+                    title: '文本转语音 - LingYu Byte AI',
+                    keywords: 'LingYu Byte AI, TTS, Text to Speech, 文本转语音',
+                    requiresAuth: true,
+                },
             }
         ]
 

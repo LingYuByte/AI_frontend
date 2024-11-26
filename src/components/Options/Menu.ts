@@ -2,18 +2,22 @@ import { h, Component, computed } from 'vue';
 import { RouterLink } from 'vue-router';
 import { NIcon } from 'naive-ui';
 import {
-    GridOutline,
     ListOutline,
     HomeOutline,
-    PersonCircleOutline,
+    ChatbubblesOutline,
     ExtensionPuzzleOutline,
+    Mic,
 
 } from '@vicons/ionicons5';
 
 
-// 菜单图标渲染函数
-function renderIcon(icon: Component) {
-    return () => h(NIcon, null, { default: () => h(icon) });
+/**
+ * 渲染图标组件。
+ * @param icon - 要渲染的图标组件。
+ * @returns 返回一个渲染函数，该函数使用 h 函数创建并返回一个 NIcon 组件实例，其中包含传入的图标组件。
+ */
+export function renderIcon(icon: Component,options?: any) {
+    return () => h(NIcon, options??null, { default: () => h(icon) });
 }
 
 // 基本菜单选项
@@ -39,30 +43,6 @@ export const computedMenuOptionsUser = computed(() => [{
     key: 'AI 功能',
     "aria-expanded" : true,
     icon: renderIcon(ListOutline),
-    // children: [
-    //     {
-    //         label: () => h(
-    //             RouterLink,
-    //             {
-    //                 to: { name: 'AI 对话' }
-    //             },
-    //             { default: () => 'AI 对话' }
-    //         ),
-    //         key: 'AI 对话',
-    //         icon: renderIcon(GridOutline)
-    //     },
-    //     {
-    //         label: () => h(
-    //             RouterLink,
-    //             {
-    //                 to: { name: '语音转文字' }
-    //             },
-    //             { default: () => '语音转文字' }
-    //         ),
-    //         key: '语音转文字',
-    //         icon: renderIcon(DocumentTextOutline)
-    //     }
-    // ]
     children: [
         {
             label: () => h(
@@ -73,7 +53,18 @@ export const computedMenuOptionsUser = computed(() => [{
                 { default: () => 'AI 对话' }
             ),
             key: 'AI 对话',
-            icon: renderIcon(GridOutline)
+            icon: renderIcon(ChatbubblesOutline)
+        },
+        {
+            label: () => h(
+                RouterLink,
+                {
+                    to: { name: '文本转语音' }
+                },
+                { default: () => '文本转语音' }
+            ),
+            key: '文本转语音',
+            icon: renderIcon(Mic)
         }
     ]
 },

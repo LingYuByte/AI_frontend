@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { render } from '@/utils/MarkdownIt/markdown'
-import {  defineProps } from 'vue';
+import { defineProps } from 'vue';
 import { NSplit, NGrid, NGridItem, NButton } from 'naive-ui'
 import { useLayoutStore } from '@/stores/useLayout';
 export interface IMessages {
     id: string,
     role: "user" | "system" | "ai",
-    content: string
+    content: string,
+    meta?: { [key: string]: any }
 }
 const props = defineProps<{
     sendMessage: (value: string) => void
@@ -20,6 +21,19 @@ function send() {
     (document.querySelector(`#messageInputer`) as HTMLDivElement).innerHTML = ``;
 }
 let layoutInfo = useLayoutStore();
+let audio = new Audio();
+function Play(url: string) {
+    console.log(url);
+    // audio.pause();
+    audio.src = url;
+    audio.play();
+}
+function Download(filename: string, url: string) {
+    let a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+}
 </script>
 <template>
     <div style="height: 100%;">
@@ -30,8 +44,18 @@ let layoutInfo = useLayoutStore();
                     <div class="message-item" v-for="(item, index) of messages" :key="index">
                         <div :class="item.role == `user` ? `message self` : `message other`">
                             <div style="margin: 0px 5px;" class="message-block">
-                                <div :id="`message-${item.id}`" class="message-detail"
+
+                                <div v-if="item.role == `user` || item.meta!.finished === false"
+                                    :id="`message-${item.id}`" class="message-detail"
                                     v-html="render(item.content, 900, [`#message-${item.id}`])">
+                                </div>
+                                <div v-else :id="`message-${item.id}`" class="message-detail">
+                                    <NButton @click="Play(item.meta!.url)">
+                                        播放
+                                    </NButton>
+                                    <NButton @click="Download(item.meta!.filename,item.meta!.url)">
+                                        下载
+                                    </NButton>
                                 </div>
                             </div>
                         </div>
@@ -41,13 +65,13 @@ let layoutInfo = useLayoutStore();
             </template>
             <template #2>
                 <NGrid :cols="48" style="height: 100%;padding-left: 20px;padding-top: 1%;">
-                    <NGridItem :span="layoutInfo.collapsed?37:34">
+                    <NGridItem :span="layoutInfo.collapsed ? 37 : 34">
                         <div id="messageInputer" contenteditable="plaintext-only">
                         </div>
                     </NGridItem>
-                    <NGridItem :span="layoutInfo.collapsed?2:4">
+                    <NGridItem :span="layoutInfo.collapsed ? 2 : 4">
                     </NGridItem>
-                    <NGridItem :span="layoutInfo.collapsed?6:9">
+                    <NGridItem :span="layoutInfo.collapsed ? 6 : 9">
                         <NButton type="primary" id="sendMessage" @click="send()">发送</NButton>
                     </NGridItem>
                 </NGrid>
@@ -130,7 +154,7 @@ let layoutInfo = useLayoutStore();
 }
 
 @media screen and (max-height:600px) {
-    #messageInputer{
+    #messageInputer {
         height: 60%;
         margin-top: 8%;
     }

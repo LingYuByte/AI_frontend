@@ -1,53 +1,31 @@
 <template>
-    <n-back-top :right="100" />
-    <n-card style="margin-bottom: 20px;height: 80vh" title="在线AI">
-        <NGrid :cols="24" style="height: 95%;margin-top: 2%;">
-            <NGridItem span="5">
-                <div>
-                    <h4></h4>
-                    <n-select v-model:value="model" :options="modelOptions" :render-option="renderModelLabel" />
-                </div>
-            </NGridItem>
-            <NGridItem span="1" style="height: 100%;">
-                <n-divider vertical style="width: 2.5px;height: 100%;--n-color:rgba(52,52,52,0.8);margin-left: 40%" />
-            </NGridItem>
-            <NGridItem span="15">
-                <ChatDetail v-model:messages="messages" :send-message="sendMessage" />
-                <!-- <n-split direction="vertical" style="height: 100%" max="400px" default-size="60%">
-                    <template #1>
-
-                    </template>
-<template #2>
-                        <div
-                            style="display: flex;width: 100%;height: 100%;justify-content: end;flex-direction: column;">
-                            <n-input @keydown.enter.native="Enter" id="inputer" style="flex: 1 1 0"
-                                v-model:value="userInput" type="textarea" placeholder="" />
-                            <span style="font-size: 12px;margin-left: auto;color: rgba(180,180,170,0.9);">
-                                按 Ctrl 键换行
-                                按 Ctrl+Enter 键发送</span>
-                        </div>
-                    </template>
-</n-split>
-<div>
-</div> -->
-            </NGridItem>
-        </NGrid>
-    </n-card>
+    <NCard style="margin-bottom: 20px;height: 80vh" title="文本转语音">
+        <template #header-extra>
+            <NSelect style="width: 10rem;" :options="voiceOptions" v-model:value="voice" :render-option="renderLabel">
+            </NSelect>
+        </template>
+        <TtsDetail v-model:messages="messages" :send-message="sendMessage" />
+    </NCard>
 </template>
 
 <script lang="tsx" setup>
-import { NCard, NGrid, NGridItem, NSelect, SelectOption, NTooltip, NBackTop } from 'naive-ui'
+import { NCard, NSelect, NTooltip, SelectOption } from 'naive-ui'
 // 获取登录信息
 import { useUserStore } from '@/stores/user';
-import ChatDetail, { IMessages } from './chatDetail.vue';
 import axios from 'axios';
 import ip from '@/utils/ip';
 import * as uuid from 'uuid'
-import { Ref, ref, VNode, h } from 'vue';
+import { h, Ref, ref, VNode } from 'vue';
+import { renderIcon } from '@/components/Options/Menu';
+import { PlayCircleOutline } from '@vicons/ionicons5';
+import { MD5 } from 'crypto-js';
+import TtsDetail,{IMessages} from './ttsDetail.vue';
 let userStore = useUserStore();
 let messages: Ref<IMessages[]> = ref([]);
-
 function sendMessage(value: string) {
+    if (value === ``) {
+        return;
+    }
     let password = userStore.userInfo?.password;
 
     messages.value.push({
@@ -58,51 +36,53 @@ function sendMessage(value: string) {
     messages.value.push({
         id: uuid.v7(),
         role: "ai",
-        content: ``
+        content: `正在生成中`,
+        meta: {
+            finished: false
+        }
     })
-    let s_queue = ``;
-    let endHandel = false;
     let x = document.querySelector(`#messageView`)!;
+    let cnt = 0;
     function intervalHandel() {
         x.scroll({
             top: x.scrollTop + 5, left: 0,
             behavior: "smooth"
         })
-        if (s_queue !== ``) {
-            setTimeout(() => {
-                messages.value[messages.value.length - 1].content += s_queue[0];
-                s_queue = s_queue.substring(1);
-            }, Math.floor(Math.random() * 25))
+        if (cnt == 5) {
+            cnt = 0;
+            messages.value[messages.value.length - 1].content = messages.value[messages.value.length - 1].content.substring(0, 6);
         }
-        else if (endHandel) {
-            clearInterval(interval);
+        else {
+            ++cnt;
+            messages.value[messages.value.length - 1].content += `.`;
         }
     }
-    let interval = setInterval(intervalHandel, 40);
+    let interval = setInterval(intervalHandel, 300);
     if (password) {
-        let offset = 0;
         axios({
             method: 'post',
-            url: `${ip}/chat`,
+            url: `${ip}/tts`,
             data: {
-                model: model.value,
-                content: value
+                content: value,
+                voice: voice.value
             },
             headers: {
                 Authorization: password
             },
-            responseType: 'stream', onDownloadProgress: ({ event: xhr }) => {
-                // responseText 包含了从一开始到此刻的全部响应内容，所以我们需要从上次结束的位置截取，获得新增的内容
-                const { responseText } = xhr.target;
-                const chunk = responseText.substring(offset);
-                // 记录这一次的结束位置
-                offset = responseText.length;
-                s_queue += chunk;
-            }
+            
         }).then((res) => {
-            console.log(res.data);
-            endHandel = true;
-            console.log(111);
+            console.log(res.data.data);
+            clearInterval(interval);
+            const blob = new Blob([new Uint8Array(res.data.data.data).buffer], {
+                type: `audio/mpeg`
+            });
+            const filename = MD5(res.data.data.content).toString() + `.mp3`;            // a.click();
+            messages.value[messages.value.length - 1].meta = {
+                url: window.URL.createObjectURL(blob),
+                filename: filename,
+                finished: true
+            }
+
         }).catch((err) => {
             console.error(err);
         })
@@ -110,31 +90,58 @@ function sendMessage(value: string) {
         console.error('User password is not set');
     }
 }
-let model = ref(`gpt-3.5-turbo-ca`);
-let modelOptions = ref([
+// alloy, echo, fable, onyx, nova, shimmer
+let voice = ref(`alloy`);
+let voiceOptions = ref([
     {
-        label: 'gpt-3.5-turbo-ca',
-        value: 'gpt-3.5-turbo-ca',
-        explain: `使用微软转发`
+        label: 'alloy',
+        value: 'alloy',
+        url: `/assets/voice/alloy.mp3`
     },
     {
-        label: 'gpt-3.5-turbo',
-        value: 'gpt-3.5-turbo',
-        explain: `比 -ca 更快但是贵`
+        label: 'echo',
+        value: 'echo',
+        url: `/assets/voice/echo.mp3`
     },
     {
-        label: 'gpt-4o-ca',
-        value: 'gpt-4o-ca',
-        explain: `比 gpt3.5 贵，能用图片，质量略高于3.5`
+        label: 'fable',
+        value: 'fable',
+        url: `/assets/voice/fable.mp3`
+    },
+    {
+        label: 'onyx',
+        value: 'onyx',
+        url: `/assets/voice/onyx.mp3`
+    },
+    {
+        label: 'nova',
+        value: 'nova',
+        url: `/assets/voice/nova.mp3`
+    },
+    {
+        label: 'shimmer',
+        value: 'shimmer',
+        url: `/assets/voice/shimmer.mp3`
     }
 ])
-function renderModelLabel({ node, option }: { node: VNode, option: SelectOption }) {
-    return h(NTooltip, {
-        delay: 500
-    }, {
+function renderLabel({ node, option }: { node: VNode, option: SelectOption }) {
+    return h(NTooltip, null, {
         trigger: () => node,
-        default: () => `${option.explain ?? option.label}`
-    })
+
+        default: () => {
+            return [
+                h('div', {
+                    style: `height: 15px;padding:3px;font-size:large;`
+                },
+                    [
+                        (renderIcon(PlayCircleOutline, {
+                            onclick: `javascript:playAudio("${option.label}")`
+                        }))()
+                    ])
+            ]
+        }
+    }
+    )
 }
 </script>
 <style>

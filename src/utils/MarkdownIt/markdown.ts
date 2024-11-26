@@ -19,7 +19,18 @@ const markdownit = new MarkdownIt({
             return str;
         }
     }
-}).use(katex)
+}).use(katex,{
+    katexOptions: {
+        throwOnError: false,
+        displayMode: true,
+        delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "\\[", right: "\\]", display: true },
+            { left: "$", right: "$", display: false },
+            { left: "\\(", right: "\\)", display: false }
+        ]
+    }
+})
 function render(value: string, _timer: number = 200, renderBlock?: any[]) {
     const res = markdownit.render(value);
     const realRenderBlock:Element[] = [];

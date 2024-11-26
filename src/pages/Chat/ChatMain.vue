@@ -1,42 +1,32 @@
 <template>
     <n-back-top :right="100" />
-    <n-card style="margin-bottom: 20px;height: 80vh" title="在线AI">
-        <NGrid :cols="24" style="height: 95%;margin-top: 2%;">
-            <NGridItem span="5">
+    <n-card style="margin-bottom: 20px;height: 80vh" title="在线AI" :header-style="{
+        padding: `10px 30px 5px`,
+        fontSize: `larger`,
+        fontWeight: `bold`,
+        backgroundColor: themeStore.getTransparentColor(`0.3`),
+        borderRadius: `10px 10px 0 0`
+    }">
+        <NGrid :cols="48" style="height: 99%;margin-top: 0.3%;">
+            <NGridItem :span="screenInfo.isHidden?0:(MenuOn.collapsed?9:11)" style="max-height: 70vh;">
                 <div>
                     <h4>模型</h4>
-                    <n-select v-model:value="model" :options="modelOptions" :render-option="renderModelLabel" />
+                    <NSelect v-model:value="model" :options="modelOptions" :render-option="renderModelLabel" />
                 </div>
             </NGridItem>
-            <NGridItem span="1" style="height: 100%;">
-                <n-divider vertical style="width: 2.5px;height: 100%;--n-color:rgba(52,52,52,0.8);margin-left: 40%" />
+            <NGridItem v-if="!screenInfo.isHidden" span="1" style="height: 100%;">
+                <NDivider vertical style="width: 2.5px;height: 100%;--n-color:rgba(52,52,52,0.8);margin-left: 40%" />
             </NGridItem>
-            <NGridItem span="15">
+            <NGridItem :span="screenInfo.isHidden?47:(MenuOn.collapsed ? 38 : 34)" style="max-height: 70vh;">
                 <ChatDetail v-model:messages="messages" :send-message="sendMessage" />
-                <!-- <n-split direction="vertical" style="height: 100%" max="400px" default-size="60%">
-                    <template #1>
-
-                    </template>
-<template #2>
-                        <div
-                            style="display: flex;width: 100%;height: 100%;justify-content: end;flex-direction: column;">
-                            <n-input @keydown.enter.native="Enter" id="inputer" style="flex: 1 1 0"
-                                v-model:value="userInput" type="textarea" placeholder="" />
-                            <span style="font-size: 12px;margin-left: auto;color: rgba(180,180,170,0.9);">
-                                按 Ctrl 键换行
-                                按 Ctrl+Enter 键发送</span>
-                        </div>
-                    </template>
-</n-split>
-<div>
-</div> -->
             </NGridItem>
         </NGrid>
     </n-card>
 </template>
 
 <script lang="tsx" setup>
-import {  NCard,NGrid, NGridItem, NSelect, SelectOption,  NTooltip,NBackTop } from 'naive-ui'
+
+import {  NCard,NGrid, NGridItem, NSelect, SelectOption,  NTooltip,NBackTop,NDivider } from 'naive-ui'
 // 获取登录信息
 import { useUserStore } from '@/stores/user';
 import ChatDetail, { IMessages } from './chatDetail.vue';
@@ -44,9 +34,14 @@ import axios from 'axios';
 import ip from '@/utils/ip';
 import * as uuid from 'uuid'
 import { Ref, ref, VNode, h } from 'vue';
+import { useLayoutStore } from '@/stores/useLayout';
+import { useThemeStore } from '@/stores/theme';
+import { useScreenStore } from '@/stores/useScreen';
 let userStore = useUserStore();
+let MenuOn = useLayoutStore();
 let messages: Ref<IMessages[]> = ref([]);
-
+let themeStore = useThemeStore();
+let screenInfo = useScreenStore();
 function sendMessage(value: string) {
     let password = userStore.userInfo?.password;
 

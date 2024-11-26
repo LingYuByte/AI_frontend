@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 
 export const useLayoutStore = defineStore('layout', {
     state: () => ({
-        collapsed: JSON.parse(localStorage.getItem('collapsed') || 'false')
+        collapsed: JSON.parse(localStorage.getItem('collapsed') || 'false') as boolean,
     }),
     actions: {
         toggleCollapse() {

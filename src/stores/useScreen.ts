@@ -4,11 +4,11 @@ import { ref, onMounted, onUnmounted } from 'vue';
 
 export const useScreenStore = defineStore('screen', () => {
     const screenWidth = ref(window.innerWidth);
-    const isHidden = ref(screenWidth.value < 600); // 初始判断屏幕宽度
+    const isHidden = ref(screenWidth.value < 800); // 初始判断屏幕宽度
 
     const checkScreenWidth = () => {
         screenWidth.value = window.innerWidth;
-        isHidden.value = screenWidth.value < 600;
+        isHidden.value = screenWidth.value < 800;
     };
 
     onMounted(() => {

@@ -60,7 +60,7 @@
 import { useScreenStore } from '@/stores/useScreen';
 import { storeToRefs } from 'pinia';
 import { useThemeVars, NSkeleton, NCard,NBackTop,NFlex,NGrid,NGi,NIcon,NStatistic,NNumberAnimation,NSpace } from 'naive-ui';
-import * as echarts from 'echarts';
+import { EChartsOption, init as Einit, graphic } from 'echarts';
 import { CheckmarkCircle } from '@vicons/ionicons5';
 import axios from 'axios';
 // 根据主题自适应样式背景颜色
@@ -241,8 +241,8 @@ interface ApiDataItem {
 const updateChart = (apiData: ApiDataItem[]) => {
     const chartDom = document.getElementById('main');
     if (chartDom) {
-        const myChart = echarts.init(chartDom as HTMLDivElement);
-        const myChart2 = echarts.init(document.getElementById('usage') as HTMLDivElement);
+        const myChart = Einit(chartDom as HTMLDivElement);
+        const myChart2 = Einit(document.getElementById('usage') as HTMLDivElement);
         // 将 API 返回的数据单位从字节转换为 MB
         const times = apiData.map(item => {
             return new Date(item.time).getMonth() + 1 + '-' + new Date(item.time).getDate();
@@ -251,7 +251,7 @@ const updateChart = (apiData: ApiDataItem[]) => {
         const inputTokens = apiData.map(item => item.promptTokens);
         const outputTokens = apiData.map(item => item.completionTokens);
 
-        const option: echarts.EChartsOption = {
+        const option: EChartsOption = {
             title: {
                 text: '花费统计',
                 textStyle: {
@@ -294,7 +294,7 @@ const updateChart = (apiData: ApiDataItem[]) => {
                     showSymbol: false,
                     areaStyle: {
                         opacity: 0.8,
-                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                        color: new graphic.LinearGradient(0, 0, 0, 1, [
                             {
                                 offset: 0,
                                 color: 'rgb(0, 221, 255)'
@@ -308,7 +308,7 @@ const updateChart = (apiData: ApiDataItem[]) => {
                 },
             ]
         };
-        const option2: echarts.EChartsOption= {
+        const option2: EChartsOption= {
             title: {
                 text: '用量统计',
                 textStyle: {

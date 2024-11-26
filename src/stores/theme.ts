@@ -7,6 +7,21 @@ interface ThemeState {
     isRGBMode: boolean;
     isDialogBoxHairGlass: boolean;
 }
+function hexToRgb(hex) {
+    let str = hex.replace("#", "");
+    if (str.length % 3) {
+        return "hex格式不正确！";
+    }
+    //获取截取的字符长度
+    let count = str.length / 3;
+    //根据字符串的长度判断是否需要 进行幂次方
+    let power = 6 / str.length;
+    let r = parseInt("0x" + str.substring(0 * count, 1 * count)) ** power;
+    let g = parseInt("0x" + str.substring(1 * count, 2 * count)) ** power;
+    let b = parseInt("0x" + str.substring(2 * count)) ** power;
+
+    return `rgb(${r}, ${g}, ${b})`;
+}
 
 const THEME_KEY = 'app-theme';
 const PRIMARY_COLOR_KEY = 'app-primary-color';
@@ -23,6 +38,19 @@ export const useThemeStore = defineStore('theme', {
         isDialogBoxHairGlass: localStorage.getItem(DBH_MODE_KEY) === 'true' || false,
     }),
     actions: {
+        getTransparentColor(transparent: string): string {
+            let color = this.primaryColor;
+            if (/#/.test(color)) { color = hexToRgb(color) }
+            console.log(color);
+            const rgbs = color.match(/\(\s*(\S*)\s*,\s*(\S*)\s*,\s*(\S*)\s*\)/);
+            if ((rgbs ?? []).length >= 4) {
+                let rgba = `rgba(${rgbs![1]}, ${rgbs![2]}, ${rgbs![3]}, ${transparent})`;
+                return rgba;
+            }
+            else {
+                throw new Error(`Invalid color format`);
+            }
+        },
         setTheme(theme: string) {
             this.theme = theme;
             localStorage.setItem(THEME_KEY, theme);
