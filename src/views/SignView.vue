@@ -12,35 +12,32 @@
                 </n-grid-item>
                 <n-grid-item span="6 m:2" class="center-content form-container" :class="{ 'form-left': isRegister }">
                     <n-card style="height: 100vh;">
-                        <template>
-                            <n-form ref="formRef" :model="model" :rules="loginRules" class="center-form">
-                                <n-alert title="隐私策略&服务条款有更新" type="info">
-                                    登录即代表您同意更新后的条款。<a href="/readme.html">点我</a> 查看隐私策略&服务条款。
-                                </n-alert>
-                                <n-form-item path="email">
-                                    <n-input v-model:value="model.email" size="large" round placeholder="用户名或邮箱"
-                                        maxlength="30" clearable />
-                                </n-form-item>
-                                <n-form-item path="password">
-                                    <n-input v-model:value="model.password" size="large" round placeholder="密码"
-                                        type="password" maxlength="64" show-password-on="mousedown" />
-                                </n-form-item>
-                                <n-flex justify="space-between">
-                                    <n-checkbox size="small" v-model:checked="keepLoggedIn" label="保持登录" />
-                                    <n-button text color="#9398b3">
-                                        重置密码
-                                    </n-button>
-                                </n-flex>
-                                <div style="display: flex; justify-content: flex-end; margin-top: 24px">
-                                    <n-button :loading="loginLoading"
-                                        :disabled="model.email === null || model.password === null || loginLoading"
-                                        round type="primary" style="width: 100%;" size="large"
-                                        @click="handleValidateButtonClick">
-                                        登录
-                                    </n-button>
-                                </div>
-                            </n-form>
-                        </template>
+                        <n-form ref="formRef" :model="model" :rules="loginRules" class="center-form">
+                            <n-alert title="隐私策略&服务条款有更新" type="info">
+                                登录即代表您同意更新后的条款。<a href="/readme.html">点我</a> 查看隐私策略&服务条款。
+                            </n-alert>
+                            <n-form-item path="email">
+                                <n-input v-model:value="model.email" size="large" round placeholder="用户名或邮箱"
+                                    maxlength="30" clearable />
+                            </n-form-item>
+                            <n-form-item path="password">
+                                <n-input v-model:value="model.password" size="large" round placeholder="密码"
+                                    type="password" maxlength="64" show-password-on="mousedown" />
+                            </n-form-item>
+                            <n-flex justify="space-between">
+                                <n-checkbox size="small" v-model:checked="keepLoggedIn" label="保持登录" />
+                                <n-button text color="#9398b3">
+                                    重置密码
+                                </n-button>
+                            </n-flex>
+                            <div style="display: flex; justify-content: flex-end; margin-top: 24px">
+                                <n-button :loading="loginLoading"
+                                    :disabled="model.email === null || model.password === null || loginLoading" round
+                                    type="primary" style="width: 100%;" size="large" @click="handleValidateButtonClick">
+                                    登录
+                                </n-button>
+                            </div>
+                        </n-form>
                     </n-card>
                 </n-grid-item>
             </n-grid>
@@ -53,9 +50,9 @@ import { useUserStore } from '@/stores/user';
 import axios from 'axios';
 import {
     FormInst,
-    useMessage, NCard, NGridItem, 
-    NFlex, NGrid, NFormItem, NInput, 
-    NAlert, NCheckbox, NButton,NLayout,NLayoutContent,NForm
+    useMessage, NCard, NGridItem,
+    NFlex, NGrid, NFormItem, NInput,
+    NAlert, NCheckbox, NButton, NLayout, NLayoutContent, NForm
 } from 'naive-ui'
 import ip from '@/utils/ip';
 import { SHA512 } from 'crypto-js';
