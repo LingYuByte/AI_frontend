@@ -11,9 +11,10 @@ import 'vfonts/Lato.css'
 // 等宽字体
 import 'vfonts/FiraCode.css'
 
+app.use(createPinia());
+
 router.beforeEach((to, _from, next) => {
     const meta = to.meta as { title?: string; keywords?: string; description?: string };
-
     if (meta) {
         if (meta.title) {
             document.title = meta.title;
@@ -42,8 +43,8 @@ router.beforeEach((to, _from, next) => {
         }
     }
     next();
-});
+}
+);
 
-app.use(createPinia());
 app.use(router);
 app.mount('#app');

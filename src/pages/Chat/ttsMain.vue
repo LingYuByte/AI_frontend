@@ -12,7 +12,6 @@
 import { NCard, NSelect, NTooltip, SelectOption } from 'naive-ui'
 // 获取登录信息
 import { useUserStore } from '@/stores/user';
-import axios from 'axios';
 import ip from '@/utils/ip';
 import * as uuid from 'uuid'
 import { h, Ref, ref, VNode } from 'vue';
@@ -20,6 +19,7 @@ import { renderIcon } from '@/components/Options/Menu';
 import { PlayCircleOutline } from '@vicons/ionicons5';
 import { MD5 } from 'crypto-js';
 import TtsDetail,{IMessages} from './ttsDetail.vue';
+import request from '@/utils/request';
 let userStore = useUserStore();
 let messages: Ref<IMessages[]> = ref([]);
 function sendMessage(value: string) {
@@ -59,7 +59,7 @@ function sendMessage(value: string) {
     }
     let interval = setInterval(intervalHandel, 300);
     if (password) {
-        axios({
+        request({
             method: 'post',
             url: `${ip}/tts`,
             data: {

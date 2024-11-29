@@ -9,6 +9,16 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/SignView.vue'),
     },
     {
+        path: `/price`,
+        name: '价格',
+        component: () => import('@/views/PriceView.vue'),
+        meta: {
+            title: '价格 - LingYu Byte AI',
+            keywords: 'LingYu Byte AI, 价格',
+            description: 'LingYu Byte AI价格，您可以在这里查看LingYu Byte AI的价格',
+        }
+    },
+    {
         path: '/',
         redirect: '/home',
         component: () => import('@/views/HomeView.vue'),
@@ -26,7 +36,6 @@ const routes: Array<RouteRecordRaw> = [
             }
         ]
     },
-
     {
         path: '/',
         name: 'AI 功能',

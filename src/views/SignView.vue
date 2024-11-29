@@ -47,7 +47,6 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user';
-import axios from 'axios';
 import {
     FormInst,
     useMessage, NCard, NGridItem,
@@ -57,6 +56,7 @@ import {
 import ip from '@/utils/ip';
 import { SHA512 } from 'crypto-js';
 import { ref, onMounted, onUnmounted } from 'vue';
+import request from '@/utils/request';
 
 const loginLoading = ref(false);
 
@@ -98,17 +98,12 @@ const handleValidateButtonClick = async () => {
     try {
         await formRef.value?.validate();
 
-        const response = await axios.post(`${ip}/login`, {
+        const response = await request.post(`${ip}/login`, {
             username: model.value.email,
             password: SHA512(model.value.password ?? ``).toString().toLowerCase()
         });
         if (response.data.code === 200) {
-            const userInfo = {
-                id: response.data.data.id,
-                username: response.data.data.username,
-                password: response.data.data.password,
-                userimg: response.data.data.userimg
-            };
+            const userInfo = response.data.data;
 
             const storageDuration = keepLoggedIn.value ? 'permanent' : '1d';
             userStore.setUser(userInfo, storageDuration);

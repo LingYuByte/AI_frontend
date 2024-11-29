@@ -8,7 +8,7 @@
         borderRadius: `10px 10px 0 0`
     }">
         <NGrid :cols="48" style="height: 99%;margin-top: 0.3%;">
-            <NGridItem :span="screenInfo.isHidden?0:(MenuOn.collapsed?9:11)" style="max-height: 70vh;">
+            <NGridItem :span="screenInfo.isHidden ? 0 : (MenuOn.collapsed ? 9 : 11)" style="max-height: 70vh;">
                 <div>
                     <h4>模型</h4>
                     <NSelect v-model:value="model" :options="modelOptions" :render-option="renderModelLabel" />
@@ -17,8 +17,8 @@
             <NGridItem v-if="!screenInfo.isHidden" span="1" style="height: 100%;">
                 <NDivider vertical style="width: 2.5px;height: 100%;--n-color:rgba(52,52,52,0.8);margin-left: 40%" />
             </NGridItem>
-            <NGridItem :span="screenInfo.isHidden?47:(MenuOn.collapsed ? 38 : 34)" style="max-height: 70vh;">
-                <ChatDetail v-model:messages="messages" :send-message="sendMessage" />
+            <NGridItem :span="screenInfo.isHidden ? 47 : (MenuOn.collapsed ? 38 : 34)" style="max-height: 70vh;">
+                <ChatDetail v-model:messages="messages" v-model:use-context="useContext"  :send-message="sendMessage" />
             </NGridItem>
         </NGrid>
     </n-card>
@@ -26,22 +26,24 @@
 
 <script lang="tsx" setup>
 
-import {  NCard,NGrid, NGridItem, NSelect, SelectOption,  NTooltip,NBackTop,NDivider } from 'naive-ui'
+import { NCard, NGrid, NGridItem, NSelect, SelectOption, NTooltip, NBackTop, NDivider } from 'naive-ui'
 // 获取登录信息
 import { useUserStore } from '@/stores/user';
 import ChatDetail, { IMessages } from './chatDetail.vue';
-import axios from 'axios';
 import ip from '@/utils/ip';
 import * as uuid from 'uuid'
 import { Ref, ref, VNode, h } from 'vue';
 import { useLayoutStore } from '@/stores/useLayout';
 import { useThemeStore } from '@/stores/theme';
 import { useScreenStore } from '@/stores/useScreen';
+import request from '@/utils/request';
 let userStore = useUserStore();
 let MenuOn = useLayoutStore();
 let messages: Ref<IMessages[]> = ref([]);
 let themeStore = useThemeStore();
 let screenInfo = useScreenStore();
+let useContext = ref(false);
+let pmt = ref(`你是一个学识渊博的专家，请回答用户的问题`);
 function sendMessage(value: string) {
     let password = userStore.userInfo?.password;
 
@@ -50,11 +52,8 @@ function sendMessage(value: string) {
         role: "user",
         content: value
     });
-    messages.value.push({
-        id: uuid.v7(),
-        role: "ai",
-        content: ``
-    })
+
+
     let s_queue = ``;
     let endHandel = false;
     let x = document.querySelector(`#messageView`)!;
@@ -74,17 +73,40 @@ function sendMessage(value: string) {
         }
     }
     let interval = setInterval(intervalHandel, 40);
+    let sendMessages: { role: "system" | "assistant" | "user", content: string }[] = [
+        {
+            role: "system",
+            content: pmt.value
+        }
+    ];
+    if (useContext.value) {
+        sendMessages = sendMessages.concat(messages.value.map(item => {
+            return {
+                role: item.role,
+                content: item.content
+            }
+        }))
+    }
+    else {
+        sendMessages.push({
+            role: "user",
+            content: value
+        });
+    }
+    messages.value.push({
+        id: uuid.v7(),
+        role: "assistant",
+        content: ``
+    })
+    console.log(sendMessages);
     if (password) {
         let offset = 0;
-        axios({
+        request({
             method: 'post',
             url: `${ip}/chat`,
             data: {
                 model: model.value,
-                content: value
-            },
-            headers: {
-                Authorization: password
+                messages: sendMessages
             },
             responseType: 'stream', onDownloadProgress: ({ event: xhr }) => {
                 // responseText 包含了从一开始到此刻的全部响应内容，所以我们需要从上次结束的位置截取，获得新增的内容

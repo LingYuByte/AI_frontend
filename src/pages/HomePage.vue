@@ -59,18 +59,19 @@
 <script lang="ts" setup>
 import { useScreenStore } from '@/stores/useScreen';
 import { storeToRefs } from 'pinia';
-import { useThemeVars, NSkeleton, NCard,NBackTop,NFlex,NGrid,NGi,NIcon,NStatistic,NNumberAnimation,NSpace } from 'naive-ui';
+import { useThemeVars, NSkeleton, NCard,NBackTop,NFlex,NGrid,NGi,NIcon,NStatistic,NNumberAnimation,NSpace, useMessage } from 'naive-ui';
 import { EChartsOption, init as Einit, graphic } from 'echarts';
 import { CheckmarkCircle } from '@vicons/ionicons5';
-import axios from 'axios';
 // 根据主题自适应样式背景颜色
 import { useStyleStore } from '@/stores/style';
 // 获取登录信息
 import { useUserStore } from '@/stores/user';
 import ip from '@/utils/ip';
-import { computed, nextTick, onMounted, ref } from 'vue';
+import { computed, nextTick, onMounted, ref, shallowRef } from 'vue';
+import request from '@/utils/request';
 
 const userStore = useUserStore();
+
 const userInfo = userStore.userInfo;
 
 const loadingTest = ref(true)
@@ -86,7 +87,7 @@ const cards = ref([
     {
         title: '总余额',
         icon: CheckmarkCircle,
-        value: 0,
+        value: userInfo?.balance??0,
         precision: 3,
         suffix: '元',
     },
@@ -98,22 +99,14 @@ const cards = ref([
         suffix: '次',
     },
 ]);
+if(userInfo?.id)
+{
+    request.post(`${ip}/getUserUsedInfo`).then(() => {
 
-axios.post(`${ip}/getCart`, null, {
-    headers: {
-        Authorization: useUserStore().userInfo?.password
-    }
-}).then((res) => {
-    cards.value[0].value = res.data.cart;
-})
-
-axios.post(`${ip}/getCartDetail`, null, {
-    headers: {
-        Authorization: useUserStore().userInfo?.password
-    }
-}).then((res) => {
-    cards.value[1].value = res.data.totalRecords;
-})
+    }).catch((err) => {
+        useMessage().error(`获取用户使用数据失败`);
+    });
+}
 const screenStore = useScreenStore();
 const { isHidden, screenWidth } = storeToRefs(screenStore);
 
@@ -123,7 +116,7 @@ const textStyle = computed(() => ({
 }));
 
 // 根据时间设置欢迎文字
-const currentTime = ref(new Date());
+const currentTime = shallowRef(new Date());
 
 
 const greeting = computed(() => {
@@ -161,8 +154,8 @@ onMounted(() => {
 const apiText = ref('');
 const yiyan = async () => {
     try {
-        const response = await axios.get(`https://api.oj.cnryh.cn/getOneWord`);
-        apiText.value = response.data.hitokoto;
+        // const response = await request.get(`${ip}/getOneWord`);
+        apiText.value = `一言`;
         loadingTest.value = false;
     } catch (error) {
         console.error('一言API调用失败：', error);
@@ -183,7 +176,7 @@ const user_amount = ref('');
 const panelinfo = async () => {
     loadingPanelInfo.value = true
     try {
-        const response = await axios.get('https://cf-v2.uapis.cn/panelinfo');
+        const response = await request.get('https://cf-v2.uapis.cn/panelinfo');
         if (response.data.code === 200) {
             tunnel_amount.value = response.data.data.tunnel_amount;
             node_amount.value = response.data.data.node_amount;
@@ -208,13 +201,9 @@ const themeVars = useThemeVars();
 const trafficInfo = async () => {
     loadingTrafficInfo.value = true;
     try {
-        const response = await axios.post(`${ip}/getCollection`, null, {
-            headers: {
-                Authorization: useUserStore().userInfo?.password
-            }
-        });
+        const response = await request.post(`${ip}/getCollection`);
         const apiData = response.data;
-
+        console.log(apiData);
         // if (apiData.status === 'success') {
         loadingTrafficInfo.value = false;
         await nextTick();

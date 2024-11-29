@@ -7,8 +7,8 @@ import hljs from 'highlight.js/lib/core'
 import ini from 'highlight.js/lib/languages/ini'
 import nginx from 'highlight.js/lib/languages/nginx'
 import powershell from 'highlight.js/lib/languages/powershell'
-import { NLoadingBarProvider,NMessageProvider,NConfigProvider,NDialogProvider, darkTheme, lightTheme, useLoadingBar } from 'naive-ui';
-import { computed, defineComponent, h, onMounted, onUnmounted,watch } from 'vue';
+import { NLoadingBarProvider, NMessageProvider, NConfigProvider, NDialogProvider, darkTheme, lightTheme, useLoadingBar, useMessage } from 'naive-ui';
+import { computed, defineComponent, h, onMounted, onUnmounted, watch } from 'vue';
 
 hljs.registerLanguage('ini', ini)
 hljs.registerLanguage('nginx', nginx)
@@ -18,6 +18,11 @@ const userStore = useUserStore();
 
 onMounted(() => {
     userStore.loadUser();
+    userStore.checkUser(true).then((res) => {
+        if (res === false) {
+            useMessage().error("登录验证失败，请重新登录");
+        }
+    })
 });
 
 // 获取当前年份
@@ -135,7 +140,7 @@ onUnmounted(() => {
 }
 </style>
 <template>
-    
+
     <n-config-provider :hljs="hljs" :theme="computedTheme" :theme-overrides="themeOverrides">
         <!-- 加载条 -->
         <n-loading-bar-provider>

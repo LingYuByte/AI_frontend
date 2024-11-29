@@ -1,23 +1,42 @@
 <script setup lang="ts">
 import { render } from '@/utils/MarkdownIt/markdown'
-import {  defineProps } from 'vue';
-import { NSplit, NGrid, NGridItem, NButton } from 'naive-ui'
+import { NSplit, NGrid, NGridItem, NButton, NFlex, NCheckbox, NTooltip, useDialog } from 'naive-ui'
 import { useLayoutStore } from '@/stores/useLayout';
+import { h } from 'vue';
 export interface IMessages {
     id: string,
-    role: "user" | "system" | "ai",
+    role: "user" | "system" | "assistant",
     content: string
 }
 const props = defineProps<{
     sendMessage: (value: string) => void
 }>()
-defineModel<IMessages[]>('messages', {
+let messages = defineModel<IMessages[]>('messages', {
     required: true,
     default: () => []
+})
+let useContext = defineModel<boolean>('useContext', {
+    required: true,
+    default: false
 })
 function send() {
     props.sendMessage((document.querySelector(`#messageInputer`) as HTMLDivElement).innerText);
     (document.querySelector(`#messageInputer`) as HTMLDivElement).innerHTML = ``;
+}
+const dialog = useDialog();
+function clearContext()
+{
+    dialog.warning({
+        title: `清空上下文`,
+        content: ()=>h(`span`,{
+            innerHTML: `确定清空上下文吗？情况后不可恢复`,style:`color:red`}
+        ),
+        positiveText: `确定`,
+        negativeText: `取消`,
+        onPositiveClick: () => {
+            messages.value = [];
+        }
+    });
 }
 let layoutInfo = useLayoutStore();
 </script>
@@ -48,7 +67,24 @@ let layoutInfo = useLayoutStore();
                     <NGridItem :span="layoutInfo.collapsed?2:4">
                     </NGridItem>
                     <NGridItem :span="layoutInfo.collapsed?6:9">
-                        <NButton type="primary" id="sendMessage" @click="send()">发送</NButton>
+                        <NFlex>
+                            <NButton type="primary" id="sendMessage" @click="send()">发送</NButton>
+                            <br />
+
+                            <NTooltip>
+                                <template #trigger>
+                                    <n-button>
+                                        <NCheckbox v-model:checked="useContext"> 使用上下文 </NCheckbox>
+                                    </n-button>
+                                </template>
+                                使用上下文后 ChatGPT 会分析以上全部消息，可能导致token消耗极快，请谨慎选择。
+                            </NTooltip>
+
+                            <br>
+                            <NButton @click="clearContext">
+                                清空上下文
+                            </NButton>
+                        </NFlex>
                     </NGridItem>
                 </NGrid>
                 <div class="layui-row">

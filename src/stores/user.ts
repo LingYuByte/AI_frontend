@@ -1,3 +1,5 @@
+import ip from '@/utils/ip';
+import axios from 'axios';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
@@ -5,7 +7,10 @@ interface UserInfo {
     id: number;
     username: string,
     password: string
-    userimg?: string
+    userimg?: string,
+    balance: number,
+    group: number,
+    group_end_time: number
 }
 
 export const useUserStore = defineStore('user', () => {
@@ -42,10 +47,30 @@ export const useUserStore = defineStore('user', () => {
         sessionStorage.removeItem('userInfo');
     };
 
+    const checkUser = async (reload:boolean = false) => {
+        let username = userInfo.value?.username;
+        let password = userInfo.value?.password as string;
+        const response = await axios.post(`${ip}/login`, {
+            username,
+            password: password.toLowerCase()
+        });
+        if (response.data.code === 200) {
+            if(reload)
+            {
+                setUser(response.data.data, 'permanent');
+            }
+            return true;
+        } else {
+            clearUser();
+            return false;
+        }
+    }
+
     return {
         userInfo,
         setUser,
         loadUser,
         clearUser,
+        checkUser
     };
 });
