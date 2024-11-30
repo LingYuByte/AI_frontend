@@ -102,8 +102,7 @@ const cards = ref([
 if(userInfo?.id)
 {
     request.post(`${ip}/getUserUsedInfo`).then(() => {
-
-    }).catch((err) => {
+    }).catch(() => {
         useMessage().error(`获取用户使用数据失败`);
     });
 }

@@ -5,39 +5,123 @@
                 :class="{ 'register-mode': isRegister, 'mobile-mode': isMobile }">
                 <n-grid-item span="0 m:4" class="center-content hero-container" :class="{ 'hero-right': isRegister }">
                     <div class="hero" @click="isMobile && toggleRegister">
-                        <h1>Sign In to<br>LingYu Byte AI</h1>
-                        <p>如果您还没有账号<br>&emsp;&emsp;请联系管理员创建账号。
-                        </p>
+                        <template v-if="!isRegister">
+                            <h1>Sign In to<br>LingYu Byte AI Panel</h1>
+                            <p>如果您还没有账号<br>请
+                                <n-button text type="primary" @click="toggleRegister">点击这里</n-button>
+                                进行注册.
+                            </p>
+                        </template>
+                        <template v-else>
+                            <h1>Sign Up to<br>LingYu Byte AI Panel</h1>
+                            <p>已经有账号了?<br>请
+                                <n-button text type="primary" @click="toggleRegister">点击这里</n-button>
+                                进行登录.
+                            </p>
+                        </template>
                     </div>
                 </n-grid-item>
                 <n-grid-item span="6 m:2" class="center-content form-container" :class="{ 'form-left': isRegister }">
                     <n-card style="height: 100vh;">
-                        <n-form ref="formRef" :model="model" :rules="loginRules" class="center-form">
-                            <n-alert title="隐私策略&服务条款有更新" type="info">
-                                登录即代表您同意更新后的条款。<a href="/readme.html">点我</a> 查看隐私策略&服务条款。
-                            </n-alert>
-                            <n-form-item path="email">
-                                <n-input v-model:value="model.email" size="large" round placeholder="用户名或邮箱"
-                                    maxlength="30" clearable />
-                            </n-form-item>
-                            <n-form-item path="password">
-                                <n-input v-model:value="model.password" size="large" round placeholder="密码"
-                                    type="password" maxlength="64" show-password-on="mousedown" />
-                            </n-form-item>
-                            <n-flex justify="space-between">
-                                <n-checkbox size="small" v-model:checked="keepLoggedIn" label="保持登录" />
-                                <n-button text color="#9398b3">
-                                    重置密码
-                                </n-button>
-                            </n-flex>
-                            <div style="display: flex; justify-content: flex-end; margin-top: 24px">
-                                <n-button :loading="loginLoading"
-                                    :disabled="model.email === null || model.password === null || loginLoading" round
-                                    type="primary" style="width: 100%;" size="large" @click="handleValidateButtonClick">
-                                    登录
-                                </n-button>
-                            </div>
-                        </n-form>
+                        <template v-if="!isRegister">
+                            <n-form ref="formRef" :model="model" :rules="loginRules" class="center-form">
+                                <n-alert title="隐私策略&服务条款有更新" type="info">
+                                    登录即代表您同意更新后的条款。<a href="/readme.html">点我</a> 查看隐私策略&服务条款。
+                                </n-alert>
+                                <n-form-item path="email">
+                                    <n-input v-model:value="model.email" size="large" round placeholder="用户名或邮箱"
+                                        maxlength="30" clearable />
+                                </n-form-item>
+                                <n-form-item path="password">
+                                    <n-input v-model:value="model.password" size="large" round placeholder="密码"
+                                        type="password" maxlength="64" show-password-on="mousedown" />
+                                </n-form-item>
+                                <n-flex justify="space-between">
+                                    <n-checkbox size="small" v-model:checked="keepLoggedIn" label="保持登录" />
+                                    <n-button text color="#9398b3">
+                                        重置密码
+                                    </n-button>
+                                </n-flex>
+                                <div style="display: flex; justify-content: flex-end; margin-top: 24px">
+                                    <n-button :loading="loginLoading"
+                                        :disabled="model.email === null || model.password === null || loginLoading"
+                                        round type="primary" style="width: 100%;" size="large"
+                                        @click="handleValidateButtonClick">
+                                        登录
+                                    </n-button>
+                                </div>
+                            </n-form>
+                        </template>
+                        <template v-else>
+                            <n-form ref="formRef" :model="formModel" :rules="registerRules" class="center-form">
+                                <n-form-item v-if="currentStep === 1" label="用户名" path="username">
+                                    <n-input v-model:value="formModel.username" size="large" round placeholder="用户名"
+                                        maxlength="20" clearable />
+                                </n-form-item>
+                                <n-form-item v-if="currentStep === 1" label="密码" path="password">
+                                    <n-input v-model:value="formModel.password" size="large" round placeholder="密码"
+                                        type="password" maxlength="48" show-password-on="mousedown" clearable />
+                                </n-form-item>
+
+                                <n-form-item v-if="currentStep === 2" label="邮箱" path="email">
+                                    <n-input v-model:value="formModel.email" size="large" round placeholder="邮箱"
+                                        type="text" maxlength="255" clearable />
+                                </n-form-item>
+                                <n-form-item v-if="currentStep === 2" label="确认密码" path="confirmPassword">
+                                    <n-input v-model:value="formModel.confirmPassword" size="large" round
+                                        placeholder="确认密码" type="password" maxlength="48" show-password-on="mousedown"
+                                        clearable />
+                                </n-form-item>
+                                <n-form-item v-if="currentStep === 3" label="图形验证码" path="imgCode">
+                                    <n-grid x-gap="12" :cols="5">
+                                        <n-gi :span="3">
+                                            <n-input v-model:value="formModel.imgCode" size="large" round
+                                                placeholder="图形验证码" maxlength="6" clearable />
+                                        </n-gi>
+                                        <n-gi :span="2">
+                                            <img :src="imgcodeURL" @click="getImgCode" style="width: 100%;" />
+                                        </n-gi>
+                                    </n-grid>
+                                </n-form-item>
+                                <n-form-item v-if="currentStep === 3" label="验证码" path="verificationCode">
+                                    <n-grid x-gap="12" :cols="5">
+                                        <n-gi :span="3">
+                                            <n-input v-model:value="formModel.verificationCode" size="large" round
+                                                placeholder="验证码" maxlength="6" clearable />
+                                        </n-gi>
+                                        <n-gi :span="2">
+                                            <n-button :loading="loadingCaptcha" @click="sendMailboxVerificationCode"
+                                                style="width: 100%;" strong secondary type="primary" round size="large"
+                                                :disabled="buttonDisabled">
+                                                {{ buttonText }}
+                                            </n-button>
+                                        </n-gi>
+                                    </n-grid>
+                                </n-form-item>
+                                <n-form-item v-if="currentStep === 3" label="条款" path="clause">
+                                    <n-checkbox size="large" v-model:checked="clause">
+                                        我同意LingYu Byte AI的<n-button text tag="a"
+                                            href="https://docs.chcat.cn/docs/Term_of_service" target="_blank"
+                                            type="primary">
+                                            服务条款
+                                        </n-button>和<n-button text tag="a" href="https://docs.chcat.cn/docs/The_Privacy"
+                                            target="_blank" type="primary">
+                                            隐私策略
+                                        </n-button>
+                                    </n-checkbox>
+                                </n-form-item>
+                                <n-flex justify="space-between" style="margin-top: 24px">
+                                    <n-button v-if="currentStep > 1" @click="prevStep" :loading="RegLoading" round
+                                        type="primary" size="large">
+                                        上一步
+                                    </n-button>
+                                    <n-button @click="nextStep" :disabled="isNextStepDisabled" :loading="RegLoading"
+                                        round type="primary" size="large">
+                                        {{ currentStep === 3 ? '注册' : '下一步' }}
+                                    </n-button>
+                                </n-flex>
+                            </n-form>
+                        </template>
                     </n-card>
                 </n-grid-item>
             </n-grid>
@@ -51,24 +135,54 @@ import {
     FormInst,
     useMessage, NCard, NGridItem,
     NFlex, NGrid, NFormItem, NInput,
-    NAlert, NCheckbox, NButton, NLayout, NLayoutContent, NForm
+    NAlert, NCheckbox, NButton, NLayout, NLayoutContent, NForm,
+    FormRules, NGi
 } from 'naive-ui'
 import ip from '@/utils/ip';
 import { SHA512 } from 'crypto-js';
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 import request from '@/utils/request';
 
 const loginLoading = ref(false);
+const imgcodeURL = ref(``);
+const imgcode = ref(``);
+const timer = ref(0);
+setInterval(() => {
+    if (timer.value > 0) {
+        timer.value -= 1;
+    }
+}, 1000)
+let message = useMessage();
+function getImgCode() {
+    if (timer.value > 0) {
+        message.warning(`请 ${timer.value} 秒后再重新请求`, {
+            duration: 2000
+        })
+        return;
+    }
+    timer.value = 10;
+    setTimeout(() => { })
+    request.post(`${ip}/getImgCode`).then((res) => {
+        if (res.data.code === 200) {
+            imgcodeURL.value = res.data.data.url;
+            imgcode.value = res.data.data.code;
+        }
+    })
+}
 
+getImgCode();
 interface ModelType {
     email: string | null
     password: string | null
 }
 const keepLoggedIn = ref(false)
+const loadingCaptcha = ref(false)
+const buttonDisabled = ref(false)
+const RegLoading = ref(false)
+const buttonText = ref('发送验证码')
+const countdown = ref(60)
 const userStore = useUserStore();
-
-
-const message = useMessage();
+const clause = ref(false);
 
 
 const router = useRouter();
@@ -78,6 +192,54 @@ const model = ref<ModelType>({
     password: null
 })
 
+const sendMailboxVerificationCode = async () => {
+    if (SHA512(formModel.value.imgCode.toLowerCase()).toString().toLowerCase() !== imgcode.value) {
+        timer.value = Math.min(timer.value, 3);
+        message.error(`图形验证码错误${timer.value === 0 ? '，请重试' : `，${timer.value}秒后重试`}`);
+        setTimeout(getImgCode, timer.value * 1000 + 300);
+        return;
+    }
+    try {
+        const response = await request.post(`${ip}/sendAuthEmail`, {
+            username: formModel.value.username,
+            email: formModel.value.email,
+        });
+        const data = response.data;
+        if (data.code === 200) {
+            message.success("邮箱验证码发送成功")
+            buttonDisabled.value = true
+            startCountdown()
+        } else {
+            message.error(data.msg);
+            console.error('邮件发送失败:', data.msg);
+        }
+    } catch (error) {
+        console.error('邮件发送API调用失败:', error);
+    }
+    loadingCaptcha.value = false
+}
+const startCountdown = () => {
+    buttonText.value = `重新发送(${countdown.value}s)`
+    const interval = setInterval(() => {
+        countdown.value -= 1
+        buttonText.value = `重新发送(${countdown.value}s)`
+        if (countdown.value <= 0) {
+            clearInterval(interval)
+            buttonDisabled.value = false
+            buttonText.value = '发送验证码'
+            countdown.value = 60 // 重置倒计时
+        }
+    }, 1000)
+}
+
+const formModel = ref({
+    username: '',
+    password: '',
+    email: '',
+    confirmPassword: '',
+    verificationCode: '',
+    imgCode: ''
+});
 const loginRules = {
     password: [
         {
@@ -92,6 +254,122 @@ const loginRules = {
         }
     ],
 }
+const registerRules: FormRules = {
+    username: [
+        {
+            required: true,
+            message: '用户名不能为空',
+            trigger: 'blur'
+        },
+        {
+            pattern: /^[A-Za-z0-9_@./#&+-]{0,20}$/,
+            message: '用户名只能包含字母、数字和常用的特殊字符',
+            trigger: ['blur', 'input']
+        }
+    ],
+    password: [
+        {
+            required: true,
+            message: '密码不能为空',
+            trigger: 'blur'
+        },
+        {
+            pattern: /^(?![a-zA-Z]+$)(?!\d+$)(?![^\da-zA-Z\s]+$).{6,48}$/,
+            message: '密码6~48位，且至少包含字母、数字、特殊符号中任意两种',
+            trigger: ['blur', 'input']
+        }
+    ],
+    email: [
+        {
+            required: true,
+            message: '邮箱不能为空',
+            trigger: 'blur'
+        },
+        {
+            type: 'email',
+            message: '请输入有效的邮箱地址',
+            trigger: ['blur', 'input']
+        }
+    ],
+    confirmPassword: [
+        {
+            required: true,
+            message: '请确认密码',
+            trigger: 'blur'
+        }
+    ],
+    verificationCode: [
+        {
+            required: true,
+            message: '验证码不能为空',
+            trigger: 'blur'
+        },
+        {
+            pattern: /^[0-9]{6}$/,
+            message: '验证码必须为6位数字',
+            trigger: ['blur', 'input']
+        }
+    ],
+    clause: [
+        {
+            required: true,
+            message: '条款不能不选',
+            trigger: 'blur'
+        },
+    ]
+};
+const currentStep = ref(1);
+const nextStep = async () => {
+    if (currentStep.value === 2 && passwordMismatch.value) {
+        message.error('密码不匹配，请重新确认。');
+    } else if (currentStep.value === 3) {
+        RegLoading.value = true;
+        try {
+            const response = await request.post(`${ip}/register`,{
+                username: formModel.value.username,
+                password: SHA512((formModel.value.password ?? ``).toString().toLowerCase()).toString().toLowerCase(),
+                email: formModel.value.email,
+                verCode: formModel.value.verificationCode
+            });
+            const data = response.data;
+            if (data.code === 200) {
+                message.success("注册成功，请登录")
+                toggleRegister()
+            } else {
+                message.error(data.message);
+                console.error('注册失败:', data.message);
+            }
+        } catch (error) {
+            console.error('注册API调用失败:', error);
+        }
+        RegLoading.value = false;
+    } else {
+        currentStep.value++;
+    }
+};
+
+const prevStep = () => {
+    if (currentStep.value > 1) {
+        currentStep.value--;
+    }
+};
+
+const passwordMismatch = computed(() => {
+    return currentStep.value === 2 && formModel.value.password !== formModel.value.confirmPassword;
+});
+
+const isNextStepDisabled = computed(() => {
+    if (currentStep.value === 1) {
+        return !formModel.value.username || !formModel.value.password;
+    }
+    if (currentStep.value === 2) {
+        return !formModel.value.email || !formModel.value.confirmPassword;
+    }
+    if (currentStep.value === 3) {
+        return !formModel.value.verificationCode || !clause.value || RegLoading.value === true
+    }
+    return false;
+});
 
 const handleValidateButtonClick = async () => {
     loginLoading.value = true //登录按钮状态设置为加载中

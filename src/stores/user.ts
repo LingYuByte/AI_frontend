@@ -49,7 +49,7 @@ export const useUserStore = defineStore('user', () => {
 
     const checkUser = async (reload:boolean = false) => {
         let username = userInfo.value?.username;
-        let password = userInfo.value?.password as string;
+        let password = ((userInfo.value?.password)??``) as string;
         const response = await axios.post(`${ip}/login`, {
             username,
             password: password.toLowerCase()
