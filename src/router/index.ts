@@ -16,33 +16,16 @@ const routes: Array<RouteRecordRaw> = [
             title: '价格 - LingYu Byte AI',
             keywords: 'LingYu Byte AI, 价格',
             description: 'LingYu Byte AI价格，您可以在这里查看LingYu Byte AI的价格',
+            requiresAuth: false
         }
     },
     {
-        path: '/',
-        redirect: '/home',
-        component: () => import('@/views/HomeView.vue'),
-        children: [
-            {
-                path: '/home',
-                name: '首页',
-                component: () => import('@/pages/HomePage.vue'),
-                meta: {
-                    title: '控制台首页 - LingYu Byte AI',
-                    keywords: 'LingYu Byte AI',
-                    description: 'LingYu Byte AI控制台首页，您可以在这里查看您的LingYu Byte AI 账户预览',
-                    requiresAuth: true,
-                }
-            }
-        ]
-    },
-    {
-        path: '/',
+        path: '/ai',
         name: 'AI 功能',
         component: () => import('@/views/ChatView.vue'),
         children: [
             {
-                path: '/chat',
+                path: 'chat',
                 name: 'AI 对话',
                 component: () => import('@/pages/Chat/ChatMain.vue'),
                 meta: {
@@ -62,8 +45,61 @@ const routes: Array<RouteRecordRaw> = [
                 },
             }
         ]
-
-    }
+    },
+    {
+        path: '/shop',
+        name: '内置商城',
+        component: () => import('@/views/ShopView.vue'),
+        children: [
+            {
+                path: 'list',
+                name: 'productList',
+                component: () => import('@/pages/shop/productList.vue'),
+                meta: {
+                    title: 'AI对话 - LingYu Byte AI',
+                    keywords: 'LingYu Byte AI, ChatGPT, AI, AI对话',
+                    requiresAuth: false,
+                },
+            },
+            {
+                path: "checkout",
+                name: "cartCheckOut",
+                component: () => import('@/pages/shop/cartCheckOut.vue'),
+                meta: {
+                    title: '商品结算 - LingYu Byte AI',
+                    keywords: 'LingYu Byte AI',
+                    requiresAuth: true,
+                },
+            },
+            {
+                path: "detail/:id",
+                name: "productDetail",
+                component: () => import('@/pages/shop/productDetail.vue'),
+                meta: {
+                    title: '商品详情 - LingYu Byte AI',
+                    keywords: 'LingYu Byte AI, shop, 商品详情, 商店',
+                    requiresAuth: true,
+                },
+            },
+        ]
+    }, 
+    {
+        path: '/',
+        component: () => import('@/views/HomeView.vue'),
+        children: [
+            {
+                path: 'home',
+                name: '首页',
+                component: () => import('@/pages/HomePage.vue'),
+                meta: {
+                    title: '控制台首页 - LingYu Byte AI',
+                    keywords: 'LingYu Byte AI',
+                    description: 'LingYu Byte AI控制台首页，您可以在这里查看您的LingYu Byte AI 账户预览',
+                    requiresAuth: false,
+                }
+            }
+        ]
+    },
 ]
 
 const router = createRouter({

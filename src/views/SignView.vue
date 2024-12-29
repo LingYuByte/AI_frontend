@@ -45,9 +45,15 @@
                                 <div style="display: flex; justify-content: flex-end; margin-top: 24px">
                                     <n-button :loading="loginLoading"
                                         :disabled="model.email === null || model.password === null || loginLoading"
-                                        round type="primary" style="width: 100%;" size="large"
+                                        round type="primary" style="width: 45%;" size="large"
                                         @click="handleValidateButtonClick">
                                         登录
+                                    </n-button>
+                                    <n-button :loading="loginLoading"
+                                        :disabled="loginLoading"
+                                        round type="primary" style="width: 45%;margin-left: 4.5%;margin-right: 4%;" size="large"
+                                        @click="()=>{isRegister = true}">
+                                        注册
                                     </n-button>
                                 </div>
                             </n-form>
@@ -325,7 +331,7 @@ const nextStep = async () => {
     } else if (currentStep.value === 3) {
         RegLoading.value = true;
         try {
-            const response = await request.post(`${ip}/register`,{
+            const response = await request.post(`${ip}/register`, {
                 username: formModel.value.username,
                 password: SHA512((formModel.value.password ?? ``).toString().toLowerCase()).toString().toLowerCase(),
                 email: formModel.value.email,

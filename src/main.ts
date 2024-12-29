@@ -4,15 +4,12 @@ import router from './router'
 import { createPinia } from 'pinia'
 import '@/assets/styles/themes.css'
 import '@/assets/styles/global.scss'
+import persist from 'pinia-plugin-persistedstate';
 const app = createApp(App)
-import 'naive-ui/'
-// 通用字体
-import 'vfonts/Lato.css'
-// 等宽字体
-import 'vfonts/FiraCode.css'
 
-app.use(createPinia());
-
+const pinia = createPinia();
+pinia.use(persist)
+app.use(pinia);
 router.beforeEach((to, _from, next) => {
     const meta = to.meta as { title?: string; keywords?: string; description?: string };
     if (meta) {

@@ -140,7 +140,6 @@ onUnmounted(() => {
 }
 </style>
 <template>
-
     <n-config-provider :hljs="hljs" :theme="computedTheme" :theme-overrides="themeOverrides">
         <!-- 加载条 -->
         <n-loading-bar-provider>

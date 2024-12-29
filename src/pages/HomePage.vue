@@ -59,7 +59,7 @@
 <script lang="ts" setup>
 import { useScreenStore } from '@/stores/useScreen';
 import { storeToRefs } from 'pinia';
-import { useThemeVars, NSkeleton, NCard,NBackTop,NFlex,NGrid,NGi,NIcon,NStatistic,NNumberAnimation,NSpace, useMessage } from 'naive-ui';
+import { useThemeVars, NSkeleton, NCard, NBackTop, NFlex, NGrid, NGi, NIcon, NStatistic, NNumberAnimation, NSpace, useMessage } from 'naive-ui';
 import { EChartsOption, init as Einit, graphic } from 'echarts';
 import { CheckmarkCircle } from '@vicons/ionicons5';
 // 根据主题自适应样式背景颜色
@@ -71,23 +71,24 @@ import { computed, nextTick, onMounted, ref, shallowRef } from 'vue';
 import request from '@/utils/request';
 
 const userStore = useUserStore();
-
+onMounted(() => {
+    userStore.loadUser();
+})
 const userInfo = userStore.userInfo;
 
 const loadingTest = ref(true)
 const loadingPanelInfo = ref(true)
 const loadingTrafficInfo = ref(true)
-
-
+const message = useMessage();
 const styleStore = useStyleStore();
 const cardStyle = computed(() => styleStore.getCardStyle());
-
+console.log(userInfo?.balance);
 
 const cards = ref([
     {
         title: '总余额',
         icon: CheckmarkCircle,
-        value: userInfo?.balance??0,
+        value: userInfo?.balance ?? 0,
         precision: 3,
         suffix: '元',
     },
@@ -99,11 +100,10 @@ const cards = ref([
         suffix: '次',
     },
 ]);
-if(userInfo?.id)
-{
-    request.post(`${ip}/getUserUsedInfo`).then(() => {
+if (userInfo?.id) {
+    request.post(`${ip}/getUserCollection`).then(() => {
     }).catch(() => {
-        useMessage().error(`获取用户使用数据失败`);
+        message.error(`获取用户使用数据失败`);
     });
 }
 const screenStore = useScreenStore();
@@ -296,7 +296,7 @@ const updateChart = (apiData: ApiDataItem[]) => {
                 },
             ]
         };
-        const option2: EChartsOption= {
+        const option2: EChartsOption = {
             title: {
                 text: '用量统计',
                 textStyle: {
@@ -313,7 +313,7 @@ const updateChart = (apiData: ApiDataItem[]) => {
             },
             xAxis: {
                 data: times,
-                
+
             },
             yAxis: {
                 type: 'value' as 'value',
@@ -322,7 +322,7 @@ const updateChart = (apiData: ApiDataItem[]) => {
                     color: themeVars.value.textColorBase
                 }
             },
-        
+
             series: [
                 {
                     name: '输入token',
@@ -337,9 +337,9 @@ const updateChart = (apiData: ApiDataItem[]) => {
                     data: outputTokens,
                     stack: 'x',
                     barWidth: '40%',
-                    
+
                 },
-                
+
             ]
         };
         // @ts-ignore

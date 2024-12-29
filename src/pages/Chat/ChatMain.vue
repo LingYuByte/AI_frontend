@@ -18,7 +18,7 @@
                 <NDivider vertical style="width: 2.5px;height: 100%;--n-color:rgba(52,52,52,0.8);margin-left: 40%" />
             </NGridItem>
             <NGridItem :span="screenInfo.isHidden ? 47 : (MenuOn.collapsed ? 38 : 34)" style="max-height: 70vh;">
-                <ChatDetail v-model:messages="messages" v-model:use-context="useContext"  :send-message="sendMessage" />
+                <ChatDetail v-model:messages="messages" v-model:use-context="useContext" :send-message="sendMessage" />
             </NGridItem>
         </NGrid>
     </n-card>
@@ -145,6 +145,11 @@ let modelOptions = ref([
         explain: `比 gpt3.5 贵，能用图片，质量略高于3.5`
     }
 ])
+request.post(`${ip}/getModels`).then((data) => {
+    modelOptions.value = data.data.data.filter((e) => { return e.type === 'chat' && e.available }).map((e) => {
+        return { label: e.name, value: e.name, explain: e.description }
+    })
+})
 function renderModelLabel({ node, option }: { node: VNode, option: SelectOption }) {
     return h(NTooltip, {
         delay: 500
