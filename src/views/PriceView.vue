@@ -45,7 +45,6 @@ import { storeToRefs } from 'pinia';
 import HeaderComponent from '@/components/HeaderComponent.vue';
 import { computed, Ref, ref } from 'vue';
 import request from '@/utils/request';
-import ip from '@/utils/ip';
 // 菜单适配手机端，自动隐藏sider
 const screenStore = useScreenStore();
 const { isHidden } = storeToRefs(screenStore);
@@ -82,11 +81,16 @@ function transPrice(type:string)
     }
 }
 let models:Ref<Model[]> = ref([]);
-request.post(`${ip}/getModels`).then((res)=>
+request.post(`/getModels`).then((res)=>
 {
     if(res.data.code == 200)
     {
-        models.value = res.data.data;
+        models.value = res.data.data.sort((a,b)=>{
+            if(a.type === b.type)
+            return a.price - b.price;
+            else 
+            return a.type.localeCompare(b.type);
+        });
     }
     else
     {

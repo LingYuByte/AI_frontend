@@ -3,6 +3,8 @@ import { render } from '@/utils/MarkdownIt/markdown'
 import { NSplit, NGrid, NGridItem, NButton, NFlex, NCheckbox, NTooltip, useDialog } from 'naive-ui'
 import { useLayoutStore } from '@/stores/useLayout';
 import { h } from 'vue';
+import { useScreenStore } from '@/stores/useScreen';
+
 export interface IMessages {
     id: string,
     role: "user" | "system" | "assistant",
@@ -23,13 +25,14 @@ function send() {
     props.sendMessage((document.querySelector(`#messageInputer`) as HTMLDivElement).innerText);
     (document.querySelector(`#messageInputer`) as HTMLDivElement).innerHTML = ``;
 }
+
 const dialog = useDialog();
-function clearContext()
-{
+function clearContext() {
     dialog.warning({
         title: `清空上下文`,
-        content: ()=>h(`span`,{
-            innerHTML: `确定清空上下文吗？情况后不可恢复`,style:`color:red`}
+        content: () => h(`span`, {
+            innerHTML: `确定清空上下文吗？情况后不可恢复`, style: `color:red`
+        }
         ),
         positiveText: `确定`,
         negativeText: `取消`,
@@ -38,7 +41,8 @@ function clearContext()
         }
     });
 }
-let layoutInfo = useLayoutStore();
+const layoutInfo = useLayoutStore();
+const screenStore = useScreenStore();
 </script>
 <template>
     <div style="height: 100%;">
@@ -59,14 +63,35 @@ let layoutInfo = useLayoutStore();
                 ::after
             </template>
             <template #2>
-                <NGrid :cols="48" style="height: 100%;padding-left: 20px;padding-top: 1%;">
-                    <NGridItem :span="layoutInfo.collapsed?37:34">
+                <NFlex v-if="screenStore.screenWidth <= 550" vertical>
+                    <div id="messageInputer" contenteditable="plaintext-only" style="flex: 1 1 1;">
+                    </div>
+                    <NFlex>
+                        <NButton type="primary" id="sendMessage" @click="send()">发送</NButton>
+                        <NTooltip>
+                            <template #trigger>
+                                <n-button>
+                                    <NCheckbox v-model:checked="useContext"> 使用上下文 </NCheckbox>
+                                </n-button>
+                            </template>
+                            使用上下文后 ChatGPT 会分析以上全部消息，可能导致token消耗极快，请谨慎选择。
+                        </NTooltip>
+
+                        <br>
+                        <NButton @click="clearContext">
+                            清空上下文
+                        </NButton>
+                    </NFlex>
+
+                </NFlex>
+                <NGrid v-else :cols="48" style="height: 100%;padding-left: 20px;padding-top: 1%;">
+                    <NGridItem :span="layoutInfo.collapsed ? 37 : 34">
                         <div id="messageInputer" contenteditable="plaintext-only">
                         </div>
                     </NGridItem>
-                    <NGridItem :span="layoutInfo.collapsed?2:4">
+                    <NGridItem :span="layoutInfo.collapsed ? 2 : 4">
                     </NGridItem>
-                    <NGridItem :span="layoutInfo.collapsed?6:9">
+                    <NGridItem :span="layoutInfo.collapsed ? 6 : 9">
                         <NFlex>
                             <NButton type="primary" id="sendMessage" @click="send()">发送</NButton>
                             <br />
@@ -99,7 +124,7 @@ let layoutInfo = useLayoutStore();
         </NSplit>
     </div>
 </template>
-<style>
+<style >
 .message {
     width: auto;
     margin: 5px 5px 10px 5px;
@@ -166,7 +191,7 @@ let layoutInfo = useLayoutStore();
 }
 
 @media screen and (max-height:600px) {
-    #messageInputer{
+    #messageInputer {
         height: 60%;
         margin-top: 8%;
     }
@@ -193,6 +218,30 @@ let layoutInfo = useLayoutStore();
 }
 
 @media screen and (min-width:1200px) {
+    #operators {
+        margin-left: 40px;
+    }
+
+    #sendMessage {
+        height: 30%;
+        width: 95%;
+        margin-left: 2%;
+        margin-top: 15%;
+        font-size: larger;
+        font-weight: 600;
+    }
+
+    #previewMessage {
+        height: 30%;
+        width: 95%;
+        margin-left: 2%;
+        margin-top: 10%;
+        font-size: larger;
+        font-weight: 600;
+    }
+}
+
+@media screen and (min-width:600px) {
     #operators {
         margin-left: 40px;
     }

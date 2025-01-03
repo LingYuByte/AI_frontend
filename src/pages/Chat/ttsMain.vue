@@ -12,7 +12,6 @@
 import { NCard, NSelect, NTooltip, SelectOption } from 'naive-ui'
 // 获取登录信息
 import { useUserStore } from '@/stores/user';
-import ip from '@/utils/ip';
 import * as uuid from 'uuid'
 import { h, Ref, ref, VNode } from 'vue';
 import { renderIcon } from '@/components/Options/Menu';
@@ -61,7 +60,7 @@ function sendMessage(value: string) {
     if (password) {
         request({
             method: 'post',
-            url: `${ip}/tts`,
+            url: `/tts`,
             data: {
                 content: value,
                 voice: voice.value

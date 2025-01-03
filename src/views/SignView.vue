@@ -45,14 +45,15 @@
                                 <div style="display: flex; justify-content: flex-end; margin-top: 24px">
                                     <n-button :loading="loginLoading"
                                         :disabled="model.email === null || model.password === null || loginLoading"
-                                        round type="primary" style="width: 100%;" size="large"
+                                        round type="primary" style="width: 45%;" size="large"
                                         @click="handleValidateButtonClick">
                                         登录
                                     </n-button>
-                                    <n-button v-if="!isRegister"
-                                        round type="primary" style="width: 100%;" size="large"
+                                    <n-button :loading="loginLoading"
+                                        :disabled="loginLoading"
+                                        round type="primary" style="width: 45%;margin-left: 4.5%;margin-right: 4%;" size="large"
                                         @click="()=>{isRegister = true}">
-                                        去注册
+                                        注册
                                     </n-button>
                                 </div>
                             </n-form>
@@ -143,7 +144,6 @@ import {
     NAlert, NCheckbox, NButton, NLayout, NLayoutContent, NForm,
     FormRules, NGi
 } from 'naive-ui'
-import ip from '@/utils/ip';
 import { SHA512 } from 'crypto-js';
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 import request from '@/utils/request';
@@ -167,7 +167,7 @@ function getImgCode() {
     }
     timer.value = 10;
     setTimeout(() => { })
-    request.post(`${ip}/getImgCode`).then((res) => {
+    request.post(`/user/getImgCode`).then((res) => {
         if (res.data.code === 200) {
             imgcodeURL.value = res.data.data.url;
             imgcode.value = res.data.data.code;
@@ -205,7 +205,7 @@ const sendMailboxVerificationCode = async () => {
         return;
     }
     try {
-        const response = await request.post(`${ip}/sendAuthEmail`, {
+        const response = await request.post(`/user/sendAuthEmail`, {
             username: formModel.value.username,
             email: formModel.value.email,
         });
@@ -330,7 +330,7 @@ const nextStep = async () => {
     } else if (currentStep.value === 3) {
         RegLoading.value = true;
         try {
-            const response = await request.post(`${ip}/register`,{
+            const response = await request.post(`/user/register`, {
                 username: formModel.value.username,
                 password: SHA512((formModel.value.password ?? ``).toString().toLowerCase()).toString().toLowerCase(),
                 email: formModel.value.email,
@@ -381,7 +381,7 @@ const handleValidateButtonClick = async () => {
     try {
         await formRef.value?.validate();
 
-        const response = await request.post(`${ip}/login`, {
+        const response = await request.post(`/user/login`, {
             username: model.value.email,
             password: SHA512(model.value.password ?? ``).toString().toLowerCase()
         });
@@ -424,7 +424,7 @@ onUnmounted(() => {
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 * {
     margin: 0;
     padding: 0;

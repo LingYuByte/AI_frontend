@@ -1,53 +1,41 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import path from 'path'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import {visualizer} from 'rollup-plugin-visualizer'
-// 缓存对象
-// const cache = new Map();
-
-// function isDepInclude(id: string, depPaths: string[], importChain: string[], getModuleInfo:Function): boolean | undefined {
-//     const key = `${id}-${depPaths.join('|')}`;
-//     // 出现循环依赖，不考虑
-//     if (importChain.includes(id)) {
-//         cache.set(key, false);
-//         return false;
-//     }
-//     // 验证缓存
-//     if (cache.has(key)) {
-//         return cache.get(key);
-//     }
-//     // 命中依赖列表
-//     if (depPaths.includes(id)) {
-//         // 引用链中的文件都记录到缓存中
-//         importChain.forEach(item => cache.set(`${item}-${depPaths.join('|')}`, true));
-//         return true;
-//     }
-//     const moduleInfo = getModuleInfo(id);
-//     if (!moduleInfo || !moduleInfo.importers) {
-//         cache.set(key, false);
-//         return false;
-//     }
-//     // 核心逻辑，递归查找上层引用者
-//     const isInclude = moduleInfo.importers.some(
-//         (importer:string) => isDepInclude(importer, depPaths, importChain.concat(id), getModuleInfo)
-//     );
-//     // 设置缓存
-//     cache.set(key, isInclude);
-//     return isInclude;
-// };
 // https://vite.dev/config/
 export default defineConfig({
-    plugins: [vue(),
-        vueJsx(),
-        visualizer()
-    ], resolve: {
-        alias: {
-            // 设置路径 这里resolve和join可自行选用
-            '~': path.resolve(__dirname, './'),
-            // 设置别名
-            '@': path.resolve(__dirname, './src')
+    build: {
+        rollupOptions: {
+            output: {
+                // 自定义静态资源路径
+                chunkFileNames: 'static/assets/js/[name]-[hash].js',
+                entryFileNames: 'static/assets/js/[name]-[hash].js',
+                assetFileNames: 'static/assets/[ext]/[name]-[hash].[ext]',
+                manualChunks: (id: string) => {
+                    if (id.includes('node_modules')) {
+                        if (id.includes('.pnpm')) {
+                            return id.toString().split('node_modules/.pnpm/')[1].split('/')[0].toString();
+                        }
+                        return id.toString().split('node_modules/')[1].split('/')[0].toString();
+
+                    }
+                    else {
+                        console.log(id);
+                        if (id.includes(__dirname)) {
+                            return id.toString().split(__dirname)[1].split('?')[0].toString().replace(/\//g, `_`);
+                        }
+                        return `app`;
+                    }
+                }
+            }
         },
-        extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue']
+    },
+    plugins: [vue(), vueJsx()],
+    base: `./`,
+    resolve: {
+        alias: {
+            '@ui': '/src/ui/src',
+            '@': '/src',
+            '~': '/src',
+        }
     }
 })

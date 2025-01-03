@@ -1,8 +1,9 @@
 import MarkdownIt from "markdown-it";
 import highlight from 'highlight.js/lib/core'
 import 'highlight.js/styles/atom-one-light.min.css'
-import katex from '@iktakahiro/markdown-it-katex'
+import katex, { MarkdownItKatexOptions } from '@iktakahiro/markdown-it-katex'
 import './style.css'
+import testtt from './1';
 const markdownit = new MarkdownIt({
     html: true, highlight: function (str, lang) {
         if (!lang) {
@@ -19,21 +20,25 @@ const markdownit = new MarkdownIt({
             return str;
         }
     }
-}).use(katex,{
-    katexOptions: {
-        throwOnError: false,
-        displayMode: true,
-        delimiters: [
-            { left: "$$", right: "$$", display: true },
-            { left: "\\[", right: "\\]", display: true },
-            { left: "$", right: "$", display: false },
-            { left: "\\(", right: "\\)", display: false }
-        ]
-    }
-})
+}).
+// use(katex,{
+//     // katexOptions: {
+//     //     throwOnError: false,
+//     //     displayMode: true,
+//     //     delimiters: [
+//     //         { left: "$$", right: "$$", display: true },
+//     //         { left: "\\[", right: "\\]", display: true },
+//     //         { left: "$", right: "$", display: true },
+//     //         { left: "\\(", right: "\\)", display: true }
+//     //     ]
+//     // }
+// } as MarkdownItKatexOptions)
+use(testtt);
 function render(value: string, _timer: number = 200, renderBlock?: any[]) {
+    console.log(value);
     const res = markdownit.render(value);
     const realRenderBlock:Element[] = [];
+
     for(let now of renderBlock??[])
     {
         if(typeof now === `string`)
