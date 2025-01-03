@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { Ref, ref } from 'vue';
 import {
     NLayout,
     NLayoutSider,
@@ -13,21 +13,26 @@ import {
 } from 'naive-ui';
 import useCartStore from '@/stores/cart';
 import router from '@/router';
+import request from '@/utils/request';
 
-const product: IProduct = {
+const product: Ref<IProduct> = ref<IProduct>({
     id: 0,
-    name: '青铜会员',
-    price: 100,
-    originalPrice: 120,
-    description: '这是一款高质量的商品，描述详细。',
-    afterSale: '支持7天无理由退货',
-    images: ['https://tse1-mm.cn.bing.net/th/id/OIP-C.kyy9HeivxWo4yodQBk4AFAHaKe?rs=1&pid=ImgDetMain', 'https://ts1.cn.mm.bing.net/th?id=OIP-C.ECd6ITnyLUoyff35MMq6iwHaNK&w=115&h=185&c=8&rs=1&qlt=90&o=6&dpr=1.5&pid=3.1&rm=2']
-};
+    name: '',
+    price: 0,
+    originalPrice: 0,
+    description: '',
+    afterSale: '',
+    images: []
+});
+request.get(`/products/${router.currentRoute.value.params.id}`).then((res) => {
+    product.value = res.data;
+    product.value.originalPrice = product.value.price;
+});
 const cartState = useCartStore();
 const dialog = useDialog();
 const addToCart = () => {
     const cartItem = {
-        ...product,
+        ...product.value,
         quantity: 1
     };
     cartState.addToCart(cartItem);

@@ -5,10 +5,14 @@ import {
     ListOutline,
     HomeOutline,
     ChatbubblesOutline,
-    ExtensionPuzzleOutline,
+    CartOutline,
+    BagHandleOutline,
     Mic,
+    CashOutline,
 
 } from '@vicons/ionicons5';
+import { useUserStore } from '@/stores/user';
+import { MenuMixedOption } from 'naive-ui/es/menu/src/interface';
 
 
 /**
@@ -16,20 +20,18 @@ import {
  * @param icon - 要渲染的图标组件。
  * @returns 返回一个渲染函数，该函数使用 h 函数创建并返回一个 NIcon 组件实例，其中包含传入的图标组件。
  */
-export function renderIcon(icon: Component,options?: any) {
-    return () => h(NIcon, options??null, { default: () => h(icon) });
+export function renderIcon(icon: Component, options?: any) {
+    return () => h(NIcon, options ?? null, { default: () => h(icon) });
 }
-
-// 基本菜单选项
-export const computedMenuOptionsUser = computed(() => [{
+const baseMenuOptions: MenuMixedOption[] = [{
     label: () => h(
         RouterLink,
         {
-            to: { name: '首页' }
+            to: { name: 'home' }
         },
         { default: () => '首页' }
     ),
-    key: '首页',
+    key: 'home',
     icon: renderIcon(HomeOutline)
 },
 {
@@ -40,89 +42,81 @@ export const computedMenuOptionsUser = computed(() => [{
 },
 {
     label: 'AI 功能',
-    key: 'AI 功能',
-    "aria-expanded" : true,
+    key: 'ai',
     icon: renderIcon(ListOutline),
     children: [
         {
             label: () => h(
                 RouterLink,
                 {
-                    to: { name: 'AI 对话' }
+                    to: { name: 'ai-chat' }
                 },
                 { default: () => 'AI 对话' }
             ),
-            key: 'AI 对话',
+            key: 'ai-chat',
             icon: renderIcon(ChatbubblesOutline)
         },
         {
             label: () => h(
                 RouterLink,
                 {
-                    to: { name: '文本转语音' }
+                    to: { name: 'ai-tts' }
                 },
                 { default: () => '文本转语音' }
             ),
-            key: '文本转语音',
+            key: 'ai-tts',
             icon: renderIcon(Mic)
         }
     ]
 },
 {
-    label: '扩展功能',
-    key: '扩展功能',
-    icon: renderIcon(ExtensionPuzzleOutline),
-    // children: [
-    //     {
-    //         label: () => h(
-    //             RouterLink,
-    //             {
-    //                 to: { name: '免费域名' }
-    //             },
-    //             { default: () => '免费域名' }
-    //         ),
-    //         key: '免费域名',
-    //         icon: renderIcon(LinkOutline)
-    //     },
-    //     {
-    //         label: () => h(
-    //             RouterLink,
-    //             {
-    //                 to: { name: '域名过白' }
-    //             },
-    //             { default: () => '域名过白' }
-    //         ),
-    //         key: '域名过白',
-    //         icon: renderIcon(ShieldCheckmarkOutline)
-    //     },
-    //     {
-    //         label: () => h(
-    //             RouterLink,
-    //             {
-    //                 to: { name: '免费SSL' }
-    //             },
-    //             { default: () => '免费SSL' }
-    //         ),
-    //         key: '免费SSL',
-    //         icon: renderIcon(KeyOutline)
-    //     },
-    //     {
-    //         label: () => h(
-    //             RouterLink,
-    //             {
-    //                 to: { name: '第三方市场' }
-    //             },
-    //             { default: () => '第三方市场' }
-    //         ),
-    //         key: '第三方市场',
-    //         icon: renderIcon(BagHandleOutline)
-    //     }
-    // ]
+    label: '商店',
+    key: 'shop',
+    icon: renderIcon(BagHandleOutline),
+    children: [
+        {
+            label: () => h(
+                RouterLink,
+                {
+                    to: { name: 'productList' }
+                },
+                { default: () => '商品列表' }
+            ),
+            key: 'productList',
+            icon: renderIcon(ChatbubblesOutline)
+        },
+        {
+            label: () => h(
+                RouterLink,
+                {
+                    to: { name: 'cartCheckOut' }
+                },
+                { default: () => '购物车' }
+            ),
+            key: 'cartCheckOut',
+            icon: renderIcon(CartOutline)
+        }
+    ]
+},
+{
+    label: ()=>h(RouterLink, {
+        to: { name: 'price' }
+    }, { default: () => '价格说明' }),
+    key: 'price',
+    icon: renderIcon(CashOutline)
 }
-]);
+];
+// 基本菜单选项
+export const computedMenuOptionsUser = computed(() => baseMenuOptions);
+export const computedMenuOptionsAdmin = computed(() => [...baseMenuOptions, {
+}]);
+const userStore = useUserStore();
+const userInfo = computed(() => userStore.userInfo);
+
 
 export const computedMenuOptions = computed(() => {
-    return computedMenuOptionsUser.value;
+    if ((!userInfo.value) || userInfo.value.group !== 0) return computedMenuOptionsUser.value;
+    return computedMenuOptionsAdmin.value;
 });
 
 export default computedMenuOptions;

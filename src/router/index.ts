@@ -5,12 +5,12 @@ import { useUserStore } from '../stores/user';
 const routes: Array<RouteRecordRaw> = [
     {
         path: '/sign',
-        name: `登录`,
+        name: `sign`,
         component: () => import('@/views/SignView.vue'),
     },
     {
         path: `/price`,
-        name: '价格',
+        name: 'price',
         component: () => import('@/views/PriceView.vue'),
         meta: {
             title: '价格 - LingYu Byte AI',
@@ -21,12 +21,12 @@ const routes: Array<RouteRecordRaw> = [
     },
     {
         path: '/ai',
-        name: 'AI 功能',
+        name: 'ai',
         component: () => import('@/views/ChatView.vue'),
         children: [
             {
                 path: 'chat',
-                name: 'AI 对话',
+                name: 'ai-chat',
                 component: () => import('@/pages/Chat/ChatMain.vue'),
                 meta: {
                     title: 'AI对话 - LingYu Byte AI',
@@ -36,7 +36,7 @@ const routes: Array<RouteRecordRaw> = [
             },
             {
                 path: "tts",
-                name: "文本转语音",
+                name: "ai-tts",
                 component: () => import('@/pages/Chat/ttsMain.vue'),
                 meta: {
                     title: '文本转语音 - LingYu Byte AI',
@@ -48,9 +48,19 @@ const routes: Array<RouteRecordRaw> = [
     },
     {
         path: '/shop',
-        name: '内置商城',
+        name: 'shop',
         component: () => import('@/views/ShopView.vue'),
         children: [
+            {
+                path: 'recharge',
+                name: 'recharge',
+                component: () => import('@/pages/shop/rechargeBalance.vue'),
+                meta: {
+                    title: '充值 - LingYu Byte AI',
+                    keywords: 'LingYu Byte AI, 充值',
+                    requiresAuth: true,
+                },
+            },
             {
                 path: 'list',
                 name: 'productList',
@@ -85,11 +95,12 @@ const routes: Array<RouteRecordRaw> = [
     }, 
     {
         path: '/',
+        redirect: '/home',
         component: () => import('@/views/HomeView.vue'),
         children: [
             {
                 path: 'home',
-                name: '首页',
+                name: 'home',
                 component: () => import('@/pages/HomePage.vue'),
                 meta: {
                     title: '控制台首页 - LingYu Byte AI',

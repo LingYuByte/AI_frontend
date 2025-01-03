@@ -4,8 +4,8 @@
         <n-card>
             <n-space justify="space-between">
                 <div style="display: flex; align-items: center;">
-                    <n-avatar :size="72" round :style="{ display: isHidden ? 'none' : 'flex' }"
-                        :src="userInfo?.userimg" />
+                    <n-avatar :size="65" round :style="{ display: isHidden ? 'none' : 'flex' }"
+                        src="https://www.loliapi.com/acg/pp/" />
                     <div :style="textStyle">
                         <h3 style="margin: 0;">{{ greeting }}</h3>
                         <n-skeleton v-if="loadingTest" width="100%" style="margin-top: 8px" :sharp="false" text />
@@ -59,14 +59,13 @@
 <script lang="ts" setup>
 import { useScreenStore } from '@/stores/useScreen';
 import { storeToRefs } from 'pinia';
-import { useThemeVars, NSkeleton, NCard, NBackTop, NFlex, NGrid, NGi, NIcon, NStatistic, NNumberAnimation, NSpace, useMessage } from 'naive-ui';
+import { useThemeVars, NSkeleton, NCard, NBackTop, NFlex, NGrid, NGi, NIcon, NStatistic, NNumberAnimation, NSpace, useMessage, NAvatar } from 'naive-ui';
 import { EChartsOption, init as Einit, graphic } from 'echarts';
 import { CheckmarkCircle } from '@vicons/ionicons5';
 // 根据主题自适应样式背景颜色
 import { useStyleStore } from '@/stores/style';
 // 获取登录信息
 import { useUserStore } from '@/stores/user';
-import ip from '@/utils/ip';
 import { computed, nextTick, onMounted, ref, shallowRef } from 'vue';
 import request from '@/utils/request';
 
@@ -77,13 +76,11 @@ onMounted(() => {
 const userInfo = userStore.userInfo;
 
 const loadingTest = ref(true)
-const loadingPanelInfo = ref(true)
 const loadingTrafficInfo = ref(true)
 const message = useMessage();
 const styleStore = useStyleStore();
 const cardStyle = computed(() => styleStore.getCardStyle());
 console.log(userInfo?.balance);
-
 const cards = ref([
     {
         title: '总余额',
@@ -100,12 +97,7 @@ const cards = ref([
         suffix: '次',
     },
 ]);
-if (userInfo?.id) {
-    request.post(`${ip}/getUserCollection`).then(() => {
-    }).catch(() => {
-        message.error(`获取用户使用数据失败`);
-    });
-}
+
 const screenStore = useScreenStore();
 const { isHidden, screenWidth } = storeToRefs(screenStore);
 
@@ -145,7 +137,6 @@ const greeting = computed(() => {
 
 onMounted(() => {
     yiyan(); //加载一言
-    panelinfo(); //加载面板信息
     trafficInfo(); //加载流量信息
 });
 
@@ -153,7 +144,6 @@ onMounted(() => {
 const apiText = ref('');
 const yiyan = async () => {
     try {
-        // const response = await request.get(`${ip}/getOneWord`);
         apiText.value = `一言`;
         loadingTest.value = false;
     } catch (error) {
@@ -161,55 +151,29 @@ const yiyan = async () => {
     }
 };
 
-
-interface FriendLinks {
-    name: string;
-    url: string;
-    description: string;
-}
-
-const friendLinks = ref<FriendLinks[]>([]);
-const tunnel_amount = ref('');
-const node_amount = ref('');
-const user_amount = ref('');
-const panelinfo = async () => {
-    loadingPanelInfo.value = true
-    try {
-        const response = await request.get('https://cf-v2.uapis.cn/panelinfo');
-        if (response.data.code === 200) {
-            tunnel_amount.value = response.data.data.tunnel_amount;
-            node_amount.value = response.data.data.node_amount;
-            user_amount.value = response.data.data.user_amount;
-            friendLinks.value = response.data.data.friend_links.map((links: FriendLinks) => ({
-                name: links.name,
-                url: links.url,
-                description: links.description,
-            }));
-        }
-    } catch (error) {
-        console.error('面板信息API调用失败', error);
-    }
-    loadingPanelInfo.value = false
-};
-
-
-
 // ECharts
 const themeVars = useThemeVars();
-
 const trafficInfo = async () => {
     loadingTrafficInfo.value = true;
     try {
-        const response = await request.post(`${ip}/getCollection`);
-        const apiData = response.data;
-        console.log(apiData);
-        // if (apiData.status === 'success') {
+        if (!userInfo?.id) {
+            return;
+        }
+        const res = await request.post(`/user/collection`);
+        if (res.status !== 200) {
+            message.error('用户统计信息获取失败');
+            return;
+        }
         loadingTrafficInfo.value = false;
+        const { useInfos, count }: { useInfos: IUseInfo[], count: number } = res.data.collection;
+        cards.value[1].value = count;
+        console.log(useInfos);
         await nextTick();
-        updateChart(apiData);
+        updateChart(groupAndSummarize(useInfos));
 
     } catch (error) {
-        console.error('流量统计API调用错误:', error);
+        message.error('用户统计信息获取失败');
+        console.error('用户统计信息获取失败', error);
     } finally {
         loadingTrafficInfo.value = false;
     }
@@ -222,6 +186,46 @@ interface ApiDataItem {
     count: number;
     promptTokens: number;
     totalTokens: number;
+}
+
+// 提取“月-日”部分的函数
+function getMMDD(dateString: string): string {
+    const date = new Date(dateString);
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${month}-${day}`;
+}
+
+// 按天分组并生成ApiDataItem数组的函数
+function groupAndSummarize(useInfos: IUseInfo[]): ApiDataItem[] {
+    const groupedData: { [key: string]: ApiDataItem } = {};
+
+    for (const item of useInfos) {
+        if (!item.createdAt) continue; // 跳过没有createdAt的记录
+
+        const time = getMMDD(item.createdAt);
+        if (!groupedData[time]) {
+            groupedData[time] = {
+                time: time,
+                completionTokens: 0,
+                cost: 0,
+                count: 0,
+                promptTokens: 0,
+                totalTokens: 0,
+            };
+        }
+
+        // 汇总各项数值，处理undefined情况
+        groupedData[time].completionTokens += (item.completionTokens || 0);
+        groupedData[time].cost += (item.cost || 0);
+        groupedData[time].count += 1;
+        groupedData[time].promptTokens += (item.promptTokens || 0);
+        groupedData[time].totalTokens += (item.totalTokens || 0);
+    }
+
+    // 将分组数据转换成ApiDataItem数组
+    const apiData: ApiDataItem[] = Object.values(groupedData);
+    return apiData;
 }
 
 

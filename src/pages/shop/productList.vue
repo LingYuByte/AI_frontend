@@ -5,7 +5,7 @@
             <template #header-extra>
                 <n-tag>{{ product.stock }} 库存</n-tag>
             </template>
-            <n-image width="100%" :src="product.image" />
+            <n-image width="100%" :src="(product.images??[])[0]" />
             <n-p>价格：{{ product.price }} 元</n-p>
             <n-button type="primary" @click="goToDetail(product.id)">立即购买</n-button>
         </n-card>
@@ -13,32 +13,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { Ref, ref } from 'vue';
 import { NCard, NTag, NImage, NP, NButton } from 'naive-ui';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
+import request from '@/utils/request';
 
 const router = useRouter();
 
-const products = ref([
-    {
-        price: 10,
-        image: `https://tse2-mm.cn.bing.net/th/id/OIP-C.3hBgFtrc4-d0daxwmH7cnwHaE8?rs=1&pid=ImgDetMain`,
-        stock: 10,
-        id: `0`,
-        name: `会员`
-    },
-    {
-        price: 10,
-        image: `https://tse2-mm.cn.bing.net/th/id/OIP-C.3hBgFtrc4-d0daxwmH7cnwHaE8?rs=1&pid=ImgDetMain`,
-        stock: 10,
-        id: `1`,
-        name: `会员`
-    }
-]);
+const products:Ref<IProduct[]> = ref([]);
+request.get(`/products`).then((res) => {
+    products.value = res.data;
+})
 
-const goToDetail = (id: string) => {
+const goToDetail = (id: number) => {
     router.push({ name: 'productDetail', params: { id } });
-    useRoute("productDetail").params.id
 };
 </script>
 

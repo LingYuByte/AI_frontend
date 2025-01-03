@@ -30,7 +30,6 @@ import { NCard, NGrid, NGridItem, NSelect, SelectOption, NTooltip, NBackTop, NDi
 // 获取登录信息
 import { useUserStore } from '@/stores/user';
 import ChatDetail, { IMessages } from './chatDetail.vue';
-import ip from '@/utils/ip';
 import * as uuid from 'uuid'
 import { Ref, ref, VNode, h } from 'vue';
 import { useLayoutStore } from '@/stores/useLayout';
@@ -66,13 +65,13 @@ function sendMessage(value: string) {
             setTimeout(() => {
                 messages.value[messages.value.length - 1].content += s_queue[0];
                 s_queue = s_queue.substring(1);
-            }, Math.floor(Math.random() * 25))
+            }, Math.floor(Math.random() * 10))
         }
         else if (endHandel) {
             clearInterval(interval);
         }
     }
-    let interval = setInterval(intervalHandel, 40);
+    let interval = setInterval(intervalHandel, 20);
     let sendMessages: { role: "system" | "assistant" | "user", content: string }[] = [
         {
             role: "system",
@@ -103,7 +102,7 @@ function sendMessage(value: string) {
         let offset = 0;
         request({
             method: 'post',
-            url: `${ip}/chat`,
+            url: `/chat`,
             data: {
                 model: model.value,
                 messages: sendMessages
@@ -145,7 +144,7 @@ let modelOptions = ref([
         explain: `比 gpt3.5 贵，能用图片，质量略高于3.5`
     }
 ])
-request.post(`${ip}/getModels`).then((data) => {
+request.post(`/getModels`).then((data) => {
     modelOptions.value = data.data.data.filter((e) => { return e.type === 'chat' && e.available }).map((e) => {
         return { label: e.name, value: e.name, explain: e.description }
     })
