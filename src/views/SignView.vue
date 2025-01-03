@@ -49,6 +49,11 @@
                                         @click="handleValidateButtonClick">
                                         登录
                                     </n-button>
+                                    <n-button v-if="!isRegister"
+                                        round type="primary" style="width: 100%;" size="large"
+                                        @click="()=>{isRegister = true}">
+                                        去注册
+                                    </n-button>
                                 </div>
                             </n-form>
                         </template>
