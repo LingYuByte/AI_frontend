@@ -1,56 +1,56 @@
 <template>
-    <n-card class="cart-card" title="购物车结算">
-        <n-list>
-            <n-list-item v-for="product in shopCart" :key="product.id">
-                <n-grid :cols="12" responsive="screen">
-                    <n-grid-item span="1">
-                        <n-checkbox v-on:update:checked="(e) => updateSelected(product.id, e)"
-                            default-checked></n-checkbox>
-                    </n-grid-item>
-                    <n-grid-item span="2">
-                        <n-image width="100" :src="product.images[0]"></n-image>
-                    </n-grid-item>
-                    <n-grid-item span="7">
-                        <n-flex vertical justify="space-between">
+    <NCard class="cart-card" title="购物车结算">
+        <NList>
+            <NListItem v-for="product in shopCart" :key="product.id">
+                <NGrid :cols="12" responsive="screen">
+                    <NGridItem span="1">
+                        <NCheckBox v-on:update:checked="(e) => updateSelected(product.id, e)"
+                            default-checked></NCheckBox>
+                    </NGridItem>
+                    <NGridItem span="2">
+                        <NImage width="100" :src="product.images[0]"></NImage>
+                    </NGridItem>
+                    <NGridItem span="7">
+                        <NFlex vertical justify="space-between">
                             <span class="product-name">{{ product.name }}</span>
                             <span class="product-description">{{ product.description }}</span>
                             <span class="product-price">单价：{{ product.price }} 元</span>
-                        </n-flex>
-                    </n-grid-item>
-                    <n-grid-item span="2">
-                        <n-flex justify="center">
-                            <n-button round size="small" @click="cartState.decrement(product.id)"
-                                :disabled="product.quantity <= 1">-</n-button>
+                        </NFlex>
+                    </NGridItem>
+                    <NGridItem span="2">
+                        <NFlex justify="center">
+                            <NButton round size="small" @click="cartState.decrement(product.id)"
+                                :disabled="product.quantity <= 1">-</NButton>
                             <span class="product-quantity">{{ product.quantity }}</span>
-                            <n-button round size="small" @click="cartState.increment(product.id)">+</n-button>
-                        </n-flex>
-                    </n-grid-item>
-                </n-grid>
-            </n-list-item>
-        </n-list>
-        <n-divider />
+                            <NButton round size="small" @click="cartState.increment(product.id)">+</NButton>
+                        </NFlex>
+                    </NGridItem>
+                </NGrid>
+            </NListItem>
+        </NList>
+        <NDivider />
         <span class="total-price">总价：{{ total }} 元</span>
-        <n-form ref="formRef" :model="formValue">
-            <n-form-item label="支付方式" path="payment">
-                <n-radio-group v-model:value="formValue.payment">
-                    <n-radio :disabled="true" value="wxpay">微信支付</n-radio>
-                    <n-radio value="alipay">支付宝支付</n-radio>
-                    <n-radio :disabled="true" value="qqpay">QQ支付</n-radio>
-                </n-radio-group>
-            </n-form-item>
-            <!-- <n-form-item label="备注" path="remark">
-                <n-input v-model:value="formValue.remark" type="textarea" placeholder="请输入您的备注，建议先与管理员协商" />
-            </n-form-item> -->
-            <n-form-item>
-                <n-button type="primary" @click="createOrder">确认购买</n-button>
-            </n-form-item>
-        </n-form>
-    </n-card>
+        <NForm ref="formRef" :model="formValue">
+            <NFormItem label="支付方式" path="payment">
+                <NRadioGroup v-model:value="formValue.payment">
+                    <NRadio :disabled="true" value="wxpay">微信支付</NRadio>
+                    <NRadio value="alipay">支付宝支付</NRadio>
+                    <NRadio :disabled="true" value="qqpay">QQ支付</NRadio>
+                </NRadioGroup>
+            </NFormItem>
+            <!-- <NFormItem label="备注" path="remark">
+                <NInput v-model:value="formValue.remark" type="textarea" placeholder="请输入您的备注，建议先与管理员协商" />
+            </NFormItem> -->
+            <NFormItem>
+                <NButton type="primary" @click="createOrder">确认购买</NButton>
+            </NFormItem>
+        </NForm>
+    </NCard>
 </template>
 
 <script setup lang="tsx">
 import { ref, computed } from 'vue';
-import { NCard, NListItem, NList, NGrid, NGridItem, NImage, NCheckbox, NFlex, NDivider, NForm, NFormItem, NRadioGroup, NRadio, NButton, useDialog, NProgress } from 'naive-ui';
+import { NCard, NListItem, NList, NGrid, NGridItem, NImage, NFlex, NDivider, NForm, NFormItem, NRadioGroup, NRadio, NButton, useDialog, NProgress } from 'naive-ui';
 import { FormInst } from 'naive-ui';
 import useCartStore from '@/stores/cart';
 import request from '@/utils/request';

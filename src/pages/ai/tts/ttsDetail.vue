@@ -47,7 +47,7 @@ function Download(filename: string, url: string) {
 
                                 <div v-if="item.role == `user` || item.meta!.finished === false"
                                     :id="`message-${item.id}`" class="message-detail"
-                                    v-html="render(item.content, 900, [`#message-${item.id}`])">
+                                    v-html="render(item.content, [`#message-${item.id}`])">
                                 </div>
                                 <div v-else :id="`message-${item.id}`" class="message-detail">
                                     <NButton @click="Play(item.meta!.url)">

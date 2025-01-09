@@ -978,7 +978,7 @@ html[data-theme=dark] {
     text-align: start
 }
 
-.vp-code-demo-header .codepen-button,
+.vp-code-demo-header .codepeNButton,
 .vp-code-demo-header .jsfiddle-button {
     border-width: 0;
     background: transparent;
@@ -996,45 +996,45 @@ html[data-theme=dark] {
 
 @media print {
 
-    .vp-code-demo-header .codepen-button,
+    .vp-code-demo-header .codepeNButton,
     .vp-code-demo-header .jsfiddle-button {
         display: none
     }
 }
 
-html[data-theme=dark] .vp-code-demo-header .codepen-button,
+html[data-theme=dark] .vp-code-demo-header .codepeNButton,
 html[data-theme=dark] .vp-code-demo-header .jsfiddle-button {
     background: #555
 }
 
-.vp-code-demo-header .codepen-button svg,
+.vp-code-demo-header .codepeNButton svg,
 .vp-code-demo-header .jsfiddle-button svg {
     width: 1.25rem;
     height: 1.25rem;
     fill: #777
 }
 
-html[data-theme=dark] .vp-code-demo-header .codepen-button svg,
+html[data-theme=dark] .vp-code-demo-header .codepeNButton svg,
 html[data-theme=dark] .vp-code-demo-header .jsfiddle-button svg {
     fill: #aaa
 }
 
-.vp-code-demo-header .codepen-button:hover,
+.vp-code-demo-header .codepeNButton:hover,
 .vp-code-demo-header .jsfiddle-button:hover {
     background: #aaa
 }
 
-html[data-theme=dark] .vp-code-demo-header .codepen-button:hover,
+html[data-theme=dark] .vp-code-demo-header .codepeNButton:hover,
 html[data-theme=dark] .vp-code-demo-header .jsfiddle-button:hover {
     background: #777
 }
 
-.vp-code-demo-header .codepen-button:hover svg,
+.vp-code-demo-header .codepeNButton:hover svg,
 .vp-code-demo-header .jsfiddle-button:hover svg {
     fill: #333
 }
 
-html[data-theme=dark] .vp-code-demo-header .codepen-button:hover svg,
+html[data-theme=dark] .vp-code-demo-header .codepeNButton:hover svg,
 html[data-theme=dark] .vp-code-demo-header .jsfiddle-button:hover svg {
     fill: #fff
 }
@@ -2701,7 +2701,7 @@ html[dir=rtl] .dropdown-wrapper .dropdown-title .arrow.start {
     padding-bottom: 0
 }
 
-.nav-screen-dropdown-title {
+.nav-screeNDropdown-title {
     border-width: 0;
     background: transparent;
     position: relative;
@@ -2716,16 +2716,16 @@ html[dir=rtl] .dropdown-wrapper .dropdown-title .arrow.start {
     cursor: pointer
 }
 
-.nav-screen-dropdown-title:hover,
-.nav-screen-dropdown-title.active {
+.nav-screeNDropdown-title:hover,
+.nav-screeNDropdown-title.active {
     color: var(--text-color)
 }
 
-.nav-screen-dropdown-title .title {
+.nav-screeNDropdown-title .title {
     flex: 1
 }
 
-.nav-screen-dropdown-title .arrow {
+.nav-screeNDropdown-title .arrow {
     display: inline-block;
     vertical-align: middle;
     width: 1em;
@@ -2737,32 +2737,32 @@ html[dir=rtl] .dropdown-wrapper .dropdown-title .arrow.start {
     transition: all .3s
 }
 
-html[data-theme=dark] .nav-screen-dropdown-title .arrow {
+html[data-theme=dark] .nav-screeNDropdown-title .arrow {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='rgba(255,255,255,0.5)' d='M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z'/%3E%3C/svg%3E")
 }
 
-.nav-screen-dropdown-title .arrow.down {
+.nav-screeNDropdown-title .arrow.down {
     transform: rotate(180deg)
 }
 
-html[dir=rtl] .nav-screen-dropdown-title .arrow.down {
+html[dir=rtl] .nav-screeNDropdown-title .arrow.down {
     transform: rotate(-180deg)
 }
 
-.nav-screen-dropdown-title .arrow.end {
+.nav-screeNDropdown-title .arrow.end {
     transform: rotate(90deg)
 }
 
-html[dir=rtl] .nav-screen-dropdown-title .arrow.end,
-.nav-screen-dropdown-title .arrow.start {
+html[dir=rtl] .nav-screeNDropdown-title .arrow.end,
+.nav-screeNDropdown-title .arrow.start {
     transform: rotate(-90deg)
 }
 
-html[dir=rtl] .nav-screen-dropdown-title .arrow.start {
+html[dir=rtl] .nav-screeNDropdown-title .arrow.start {
     transform: rotate(90deg)
 }
 
-.nav-screen-dropdown {
+.nav-screeNDropdown {
     overflow: hidden;
     margin: .5rem 0 0;
     padding: 0;
@@ -2772,13 +2772,13 @@ html[dir=rtl] .nav-screen-dropdown-title .arrow.start {
     transform-origin: top
 }
 
-.nav-screen-dropdown.hide {
+.nav-screeNDropdown.hide {
     height: 0;
     margin: 0;
     transform: scaleY(0)
 }
 
-.nav-screen-dropdown .nav-link {
+.nav-screeNDropdown .nav-link {
     position: relative;
     display: block;
     padding-inline-start: .5rem;
@@ -2786,21 +2786,21 @@ html[dir=rtl] .nav-screen-dropdown-title .arrow.start {
     line-height: 2
 }
 
-.nav-screen-dropdown .nav-link:hover,
-.nav-screen-dropdown .nav-link.active {
+.nav-screeNDropdown .nav-link:hover,
+.nav-screeNDropdown .nav-link.active {
     color: var(--theme-color)
 }
 
-.nav-screen-dropdown .nav-link .icon {
+.nav-screeNDropdown .nav-link .icon {
     font-size: 1em
 }
 
-.nav-screen-dropdown .dropdown-item {
+.nav-screeNDropdown .dropdown-item {
     color: inherit;
     line-height: 1.7rem
 }
 
-.nav-screen-dropdown .dropdown-subtitle {
+.nav-screeNDropdown .dropdown-subtitle {
     margin: 0;
     padding-inline-start: .25rem;
     color: var(--grey-light);
@@ -2810,17 +2810,17 @@ html[dir=rtl] .nav-screen-dropdown-title .arrow.start {
     text-transform: uppercase
 }
 
-.nav-screen-dropdown .dropdown-subtitle .nav-link {
+.nav-screeNDropdown .dropdown-subtitle .nav-link {
     padding: 0
 }
 
-.nav-screen-dropdown .dropdown-subitem-wrapper {
+.nav-screeNDropdown .dropdown-subitem-wrapper {
     margin: 0;
     padding: 0;
     list-style: none
 }
 
-.nav-screen-dropdown .dropdown-subitem {
+.nav-screeNDropdown .dropdown-subitem {
     padding-inline-start: .5rem;
     font-size: .9em
 }
@@ -2958,12 +2958,12 @@ html[dir=rtl] .nav-screen-dropdown-title .arrow.start {
     height: 1.25rem
 }
 
-.enter-fullscreen-icon:hover,
-.cancel-fullscreen-icon {
+.enter-fullscreeNIcon:hover,
+.cancel-fullscreeNIcon {
     color: var(--theme-color)
 }
 
-.cancel-fullscreen-icon:hover {
+.cancel-fullscreeNIcon:hover {
     color: var(--grey-dark)
 }
 
@@ -5852,7 +5852,7 @@ html[data-theme=dark] .vp-toc-wrapper::-webkit-scrollbar-thumb:vertical {
     text-align: center
 }
 
-.vp-page.not-found .action-button {
+.vp-page.not-found .actioNButton {
     display: inline-block;
     box-sizing: border-box;
     margin: .25rem;
@@ -5867,7 +5867,7 @@ html[data-theme=dark] .vp-toc-wrapper::-webkit-scrollbar-thumb:vertical {
     transition: background var(--color-transition)
 }
 
-.vp-page.not-found .action-button:hover {
+.vp-page.not-found .actioNButton:hover {
     background: var(--theme-color-light);
     cursor: pointer
 }

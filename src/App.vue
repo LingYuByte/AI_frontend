@@ -7,7 +7,7 @@ import hljs from 'highlight.js/lib/core'
 import ini from 'highlight.js/lib/languages/ini'
 import nginx from 'highlight.js/lib/languages/nginx'
 import powershell from 'highlight.js/lib/languages/powershell'
-import { NLoadingBarProvider, NMessageProvider, NConfigProvider, NDialogProvider, darkTheme, lightTheme, useLoadingBar, useMessage } from 'naive-ui';
+import { NLoadingBarProvider, NMessageProvider, NConfigProvider, NDialogProvider, darkTheme, lightTheme, useLoadingBar, useMessage, NNotificationProvider } from 'naive-ui';
 import { computed, defineComponent, h, onMounted, onUnmounted, watch } from 'vue';
 
 hljs.registerLanguage('ini', ini)
@@ -140,16 +140,18 @@ onUnmounted(() => {
 }
 </style>
 <template>
-    <n-config-provider :hljs="hljs" :theme="computedTheme" :theme-overrides="themeOverrides">
+    <NConfigProvider :hljs="hljs" :theme="computedTheme" :theme-overrides="themeOverrides">
         <!-- 加载条 -->
-        <n-loading-bar-provider>
+        <NLoadingBarProvider>
             <!-- 顶部信息 -->
-            <n-message-provider>
+            <NMessageProvider>
                 <!-- 对话框 -->
-                <n-dialog-provider>
-                    <ViewComponent />
-                </n-dialog-provider>
-            </n-message-provider>
-        </n-loading-bar-provider>
-    </n-config-provider>
+                <NDialogProvider>
+                    <NNotificationProvider>
+                        <ViewComponent />
+                    </NNotificationProvider>
+                </NDialogProvider>
+            </NMessageProvider>
+        </NLoadingBarProvider>
+    </NConfigProvider>
 </template>

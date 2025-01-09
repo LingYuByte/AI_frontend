@@ -22,7 +22,8 @@ const product: Ref<IProduct> = ref<IProduct>({
     originalPrice: 0,
     description: '',
     afterSale: '',
-    images: []
+    images: [],
+    stock: 0
 });
 request.get(`/products/${router.currentRoute.value.params.id}`).then((res) => {
     product.value = res.data;
@@ -47,35 +48,35 @@ const addToCart = () => {
 </script>
 
 <template>
-    <n-card :title="product.name + `  商品详情`">
-        <n-layout class="product-detail">
-            <n-layout has-sider>
-                <n-layout-sider bordered>
-                    <n-carousel indicator-placement="outside" show-arrow autoplay style="height: 35vh;">
+    <NCard :title="product.name + `  商品详情`">
+        <NLayout class="product-detail">
+            <NLayout has-sider>
+                <NLayoutSider bordered>
+                    <NCarousel indicator-placement="outside" show-arrow autoplay style="height: 35vh;">
                         <img v-for="(image, index) in product.images" :key="index" :src="image"
                             class="carousel-image" />
-                    </n-carousel>
-                </n-layout-sider>
-                <n-layout content-style="padding: 0 40px;">
+                    </NCarousel>
+                </NLayoutSider>
+                <NLayout content-style="padding: 0 40px;">
                     <NFlex vertical justify="space-between">
                         <p class="price">
                             <span class="discount-price">¥{{ product.price }}</span>
                             <span class="original-price">¥{{ product.originalPrice }}</span>
                         </p>
-                        <n-button type="primary" @click="addToCart" style="width: 15%;" size="large">购买</n-button>
-                        <n-collapse default-expanded-names="商品详情">
-                            <n-collapse-item title="商品详情" name="商品详情">
+                        <NButton type="primary" @click="addToCart" style="width: 15%;" size="large">购买</NButton>
+                        <NCollapse default-expanded-names="商品详情">
+                            <NCollapseItem title="商品详情" name="商品详情">
                                 <p>{{ product.description }}</p>
-                            </n-collapse-item>
-                            <n-collapse-item title="售后说明" name="售后说明">
+                            </NCollapseItem>
+                            <NCollapseItem title="售后说明" name="售后说明">
                                 <p>{{ product.afterSale }}</p>
-                            </n-collapse-item>
-                        </n-collapse>
+                            </NCollapseItem>
+                        </NCollapse>
                     </NFlex>
-                </n-layout>
-            </n-layout>
-        </n-layout>
-    </n-card>
+                </NLayout>
+            </NLayout>
+        </NLayout>
+    </NCard>
 
 </template>
 

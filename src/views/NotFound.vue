@@ -1,18 +1,19 @@
 <template>
-    <n-layout style="height: 100vh">
-        <n-layout-content>
-            <n-space vertical size="large" align="center" justify="center" class="not-found-page">
-                <n-result status="404" title="404" description="对不起，您访问的页面不存在">
+    <NLayout style="height: 100vh">
+        <NLayout-content>
+            <NSpace vertical size="large" align="center" justify="center" class="not-found-page">
+                <NResult status="404" title="404" description="对不起，您访问的页面不存在">
                     <template #footer>
-                        <n-button type="primary" @click="goHome">返回主页</n-button>
+                        <NButton type="primary" @click="goHome">返回主页</NButton>
                     </template>
-                </n-result>
-            </n-space>
-        </n-layout-content>
-    </n-layout>
+                </NResult>
+            </NSpace>
+        </NLayout-content>
+    </NLayout>
 </template>
 
 <script lang="ts">
+import { NResult } from 'naive-ui';
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 

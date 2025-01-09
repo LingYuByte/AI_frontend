@@ -27,7 +27,7 @@ const routes: Array<RouteRecordRaw> = [
             {
                 path: 'chat',
                 name: 'ai-chat',
-                component: () => import('@/pages/Chat/ChatMain.vue'),
+                component: () => import('@/pages/ai/chat/ChatMain.vue'),
                 meta: {
                     title: 'AI对话 - LingYu Byte AI',
                     keywords: 'LingYu Byte AI, ChatGPT, AI, AI对话',
@@ -37,10 +37,20 @@ const routes: Array<RouteRecordRaw> = [
             {
                 path: "tts",
                 name: "ai-tts",
-                component: () => import('@/pages/Chat/ttsMain.vue'),
+                component: () => import('@/pages/ai/tts/ttsMain.vue'),
                 meta: {
                     title: '文本转语音 - LingYu Byte AI',
                     keywords: 'LingYu Byte AI, TTS, Text to Speech, 文本转语音',
+                    requiresAuth: true,
+                },
+            },
+            {
+                path: "image",
+                name: "ai-image",
+                component: () => import('@/pages/ai/image/imageEdit.vue'),
+                meta: {
+                    title: '图片编辑 - LingYu Byte AI',
+                    keywords: 'LingYu Byte AI, TTS, Text to Speech, 图片, 图片编辑',
                     requiresAuth: true,
                 },
             }

@@ -1,44 +1,44 @@
 <template>
-    <n-space justify="space-between" class="center-aligned">
+    <NSpace justify="space-between" class="center-aligned">
         <span
             :style="{ display: isHidden ? 'none' : 'flex', color: themeStore.primaryColor, marginLeft: '24px', fontSize: '26px', transition: 'color 0.2s' }">
             LingYu Byte AI
         </span>
         <div :style="{ display: isHidden ? 'flex' : 'none' }">
-            <n-dropdown size="large" :options="computedMenuOptions">
-                <n-button quaternary style="font-size: 18px">
-                    <n-icon :component="MenuOutline" style="cursor: pointer;"></n-icon>
-                </n-button>
-            </n-dropdown>
+            <NDropdown size="large" :options="computedMenuOptions">
+                <NButton quaternary style="font-size: 18px">
+                    <NIcon :component="MenuOutline" style="cursor: pointer;"></NIcon>
+                </NButton>
+            </NDropdown>
         </div>
-        <n-space class="center-aligned" justify="space-between">
-            <n-popover trigger="hover" style="border-radius: 8px;">
+        <NSpace class="center-aligned" justify="space-between">
+            <NPopover trigger="hover" style="border-radius: 8px;">
                 <template #trigger>
-                    <n-button quaternary style="font-size: 18px;" @click="ThemeSwitcherDrawer('right')">
-                        <n-icon :component="SettingsOutline" style="cursor: pointer;"></n-icon>
-                    </n-button>
+                    <NButton quaternary style="font-size: 18px;" @click="ThemeSwitcherDrawer('right')">
+                        <NIcon :component="SettingsOutline" style="cursor: pointer;"></NIcon>
+                    </NButton>
                 </template>
                 <span>面板设置</span>
-            </n-popover>
-            <n-dropdown trigger="hover" :options="userDropdownOptions">
-                <n-button quaternary size="large" class="avatar-container">
-                    <n-avatar round size="large" src="https://www.loliapi.com/acg/pp/"
+            </NPopover>
+            <NDropdown trigger="hover" :options="userDropdownOptions">
+                <NButton quaternary size="large" class="avatar-container">
+                    <NAvatar round size="large" src="https://www.loliapi.com/acg/pp/"
                         style="cursor: pointer;">
-                    </n-avatar>
+                    </NAvatar>
                     <div class="text-container">
-                        <n-performant-ellipsis style="max-width: 90px">
+                        <NPerformantEllipsis style="max-width: 90px">
                             <div class="text-top">{{ userInfo?.username || '尚未登陆' }}</div>
-                        </n-performant-ellipsis>
+                        </NPerformantEllipsis>
                     </div>
-                </n-button>
-            </n-dropdown>
-        </n-space>
-    </n-space>
-    <n-drawer v-model:show="themeSwitcherDrawer" :placement="placement" :default-width="251" resizable>
-        <n-drawer-content title="面板配置">
+                </NButton>
+            </NDropdown>
+        </NSpace>
+    </NSpace>
+    <NDrawer v-model:show="themeSwitcherDrawer" :placement="placement" :default-width="251" resizable>
+        <NDrawerContent title="面板配置">
             <ThemeSwitcher />
-        </n-drawer-content>
-    </n-drawer>
+        </NDrawerContent>
+    </NDrawer>
 </template>
 
 <script lang="ts" setup>

@@ -1,148 +1,150 @@
 <template>
-    <n-layout style="height: 100vh">
-        <n-layout-content>
-            <n-grid cols="6" item-responsive responsive="screen"
+    <NLayout style="height: 100vh">
+        <NLayoutContent>
+            <NGrid cols="6" item-responsive responsive="screen"
                 :class="{ 'register-mode': isRegister, 'mobile-mode': isMobile }">
-                <n-grid-item span="0 m:4" class="center-content hero-container" :class="{ 'hero-right': isRegister }">
+                <NGridItem span="0 m:4" class="center-content hero-container" :class="{ 'hero-right': isRegister }">
                     <div class="hero" @click="isMobile && toggleRegister">
                         <template v-if="!isRegister">
                             <h1>Sign In to<br>LingYu Byte AI Panel</h1>
                             <p>如果您还没有账号<br>请
-                                <n-button text type="primary" @click="toggleRegister">点击这里</n-button>
+                                <NButton text type="primary" @click="toggleRegister">点击这里</NButton>
                                 进行注册.
                             </p>
                         </template>
                         <template v-else>
                             <h1>Sign Up to<br>LingYu Byte AI Panel</h1>
                             <p>已经有账号了?<br>请
-                                <n-button text type="primary" @click="toggleRegister">点击这里</n-button>
+                                <NButton text type="primary" @click="toggleRegister">点击这里</NButton>
                                 进行登录.
                             </p>
                         </template>
                     </div>
-                </n-grid-item>
-                <n-grid-item span="6 m:2" class="center-content form-container" :class="{ 'form-left': isRegister }">
-                    <n-card style="height: 100vh;">
+                </NGridItem>
+                <NGridItem span="6 m:2" class="center-content form-container" :class="{ 'form-left': isRegister }">
+                    <NCard style="height: 100vh;">
                         <template v-if="!isRegister">
-                            <n-form ref="formRef" :model="model" :rules="loginRules" class="center-form">
-                                <n-alert title="隐私策略&服务条款有更新" type="info">
+                            <NForm ref="formRef" :model="model" :rules="loginRules" class="center-form">
+                                <NAlert title="隐私策略&服务条款有更新" type="info">
                                     登录即代表您同意更新后的条款。<a href="/readme.html">点我</a> 查看隐私策略&服务条款。
-                                </n-alert>
-                                <n-form-item path="email">
-                                    <n-input v-model:value="model.email" size="large" round placeholder="用户名或邮箱"
+                                </NAlert>
+                                <NFormItem path="email">
+                                    <NInput v-model:value="model.email" size="large" round placeholder="用户名或邮箱"
                                         maxlength="30" clearable />
-                                </n-form-item>
-                                <n-form-item path="password">
-                                    <n-input v-model:value="model.password" size="large" round placeholder="密码"
+                                </NFormItem>
+                                <NFormItem path="password">
+                                    <NInput v-model:value="model.password" size="large" round placeholder="密码"
                                         type="password" maxlength="64" show-password-on="mousedown" />
-                                </n-form-item>
-                                <n-flex justify="space-between">
-                                    <n-checkbox size="small" v-model:checked="keepLoggedIn" label="保持登录" />
-                                    <n-button text color="#9398b3">
+                                </NFormItem>
+                                <NFlex justify="space-between">
+                                    <NCheckBox size="small" v-model:checked="keepLoggedIn" label="保持登录" />
+                                    <NButton text color="#9398b3">
                                         重置密码
-                                    </n-button>
-                                </n-flex>
+                                    </NButton>
+                                </NFlex>
                                 <div style="display: flex; justify-content: flex-end; margin-top: 24px">
-                                    <n-button :loading="loginLoading"
+                                    <NButton :loading="loginLoading"
                                         :disabled="model.email === null || model.password === null || loginLoading"
                                         round type="primary" style="width: 45%;" size="large"
                                         @click="handleValidateButtonClick">
                                         登录
-                                    </n-button>
-                                    <n-button :loading="loginLoading"
+                                    </NButton>
+                                    <NButton :loading="loginLoading"
                                         :disabled="loginLoading"
                                         round type="primary" style="width: 45%;margin-left: 4.5%;margin-right: 4%;" size="large"
                                         @click="()=>{isRegister = true}">
                                         注册
-                                    </n-button>
+                                    </NButton>
                                 </div>
-                            </n-form>
+                            </NForm>
                         </template>
                         <template v-else>
-                            <n-form ref="formRef" :model="formModel" :rules="registerRules" class="center-form">
-                                <n-form-item v-if="currentStep === 1" label="用户名" path="username">
-                                    <n-input v-model:value="formModel.username" size="large" round placeholder="用户名"
+                            <NForm ref="formRef" :model="formModel" :rules="registerRules" class="center-form">
+                                <NFormItem v-if="currentStep === 1" label="用户名" path="username">
+                                    <NInput v-model:value="formModel.username" size="large" round placeholder="用户名"
                                         maxlength="20" clearable />
-                                </n-form-item>
-                                <n-form-item v-if="currentStep === 1" label="密码" path="password">
-                                    <n-input v-model:value="formModel.password" size="large" round placeholder="密码"
+                                </NFormItem>
+                                <NFormItem v-if="currentStep === 1" label="密码" path="password">
+                                    <NInput v-model:value="formModel.password" size="large" round placeholder="密码"
                                         type="password" maxlength="48" show-password-on="mousedown" clearable />
-                                </n-form-item>
+                                </NFormItem>
 
-                                <n-form-item v-if="currentStep === 2" label="邮箱" path="email">
-                                    <n-input v-model:value="formModel.email" size="large" round placeholder="邮箱"
+                                <NFormItem v-if="currentStep === 2" label="邮箱" path="email">
+                                    <NInput v-model:value="formModel.email" size="large" round placeholder="邮箱"
                                         type="text" maxlength="255" clearable />
-                                </n-form-item>
-                                <n-form-item v-if="currentStep === 2" label="确认密码" path="confirmPassword">
-                                    <n-input v-model:value="formModel.confirmPassword" size="large" round
+                                </NFormItem>
+                                <NFormItem v-if="currentStep === 2" label="确认密码" path="confirmPassword">
+                                    <NInput v-model:value="formModel.confirmPassword" size="large" round
                                         placeholder="确认密码" type="password" maxlength="48" show-password-on="mousedown"
                                         clearable />
-                                </n-form-item>
-                                <n-form-item v-if="currentStep === 3" label="图形验证码" path="imgCode">
-                                    <n-grid x-gap="12" :cols="5">
-                                        <n-gi :span="3">
-                                            <n-input v-model:value="formModel.imgCode" size="large" round
+                                </NFormItem>
+                                <NFormItem v-if="currentStep === 3" label="图形验证码" path="imgCode">
+                                    <NGrid x-gap="12" :cols="5">
+                                        <NGridItem :span="3">
+                                            <NInput v-model:value="formModel.imgCode" size="large" round
                                                 placeholder="图形验证码" maxlength="6" clearable />
-                                        </n-gi>
-                                        <n-gi :span="2">
+                                        </NGridItem>
+                                        <NGridItem :span="2">
                                             <img :src="imgcodeURL" @click="getImgCode" style="width: 100%;" />
-                                        </n-gi>
-                                    </n-grid>
-                                </n-form-item>
-                                <n-form-item v-if="currentStep === 3" label="验证码" path="verificationCode">
-                                    <n-grid x-gap="12" :cols="5">
-                                        <n-gi :span="3">
-                                            <n-input v-model:value="formModel.verificationCode" size="large" round
+                                        </NGridItem>
+                                    </NGrid>
+                                </NFormItem>
+                                <NFormItem v-if="currentStep === 3" label="验证码" path="verificationCode">
+                                    <NGrid x-gap="12" :cols="5">
+                                        <NGridItem :span="3">
+                                            <NInput v-model:value="formModel.verificationCode" size="large" round
                                                 placeholder="验证码" maxlength="6" clearable />
-                                        </n-gi>
-                                        <n-gi :span="2">
-                                            <n-button :loading="loadingCaptcha" @click="sendMailboxVerificationCode"
+                                        </NGridItem>
+                                        <NGridItem :span="2">
+                                            <NButton :loading="loadingCaptcha" @click="sendMailboxVerificationCode"
                                                 style="width: 100%;" strong secondary type="primary" round size="large"
                                                 :disabled="buttonDisabled">
                                                 {{ buttonText }}
-                                            </n-button>
-                                        </n-gi>
-                                    </n-grid>
-                                </n-form-item>
-                                <n-form-item v-if="currentStep === 3" label="条款" path="clause">
-                                    <n-checkbox size="large" v-model:checked="clause">
-                                        我同意LingYu Byte AI的<n-button text tag="a"
+                                            </NButton>
+                                        </NGridItem>
+                                    </NGrid>
+                                </NFormItem>
+                                <NFormItem v-if="currentStep === 3" label="条款" path="clause">
+                                    <NCheckbox size="large" v-model:checked="clause">
+                                        我同意LingYu Byte AI的<NButton text tag="a"
                                             href="https://docs.chcat.cn/docs/Term_of_service" target="_blank"
                                             type="primary">
                                             服务条款
-                                        </n-button>和<n-button text tag="a" href="https://docs.chcat.cn/docs/The_Privacy"
+                                        </NButton>和<NButton text tag="a" href="https://docs.chcat.cn/docs/The_Privacy"
                                             target="_blank" type="primary">
                                             隐私策略
-                                        </n-button>
-                                    </n-checkbox>
-                                </n-form-item>
-                                <n-flex justify="space-between" style="margin-top: 24px">
-                                    <n-button v-if="currentStep > 1" @click="prevStep" :loading="RegLoading" round
+                                        </NButton>
+                                    </NCheckBox>
+                                </NFormItem>
+                                <NFlex justify="space-between" style="margin-top: 24px">
+                                    <NButton v-if="currentStep > 1" @click="prevStep" :loading="RegLoading" round
                                         type="primary" size="large">
                                         上一步
-                                    </n-button>
-                                    <n-button @click="nextStep" :disabled="isNextStepDisabled" :loading="RegLoading"
+                                    </NButton>
+                                    <NButton @click="nextStep" :disabled="isNextStepDisabled" :loading="RegLoading"
                                         round type="primary" size="large">
                                         {{ currentStep === 3 ? '注册' : '下一步' }}
-                                    </n-button>
-                                </n-flex>
-                            </n-form>
+                                    </NButton>
+                                </NFlex>
+                            </NForm>
                         </template>
-                    </n-card>
-                </n-grid-item>
-            </n-grid>
-        </n-layout-content>
-    </n-layout>
+                    </NCard>
+                </NGridItem>
+            </NGrid>
+        </NLayoutContent>
+    </NLayout>
 </template>
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 import {
     FormInst,
-    useMessage, NCard, NGridItem,
+    useMessage, NCard,
     NFlex, NGrid, NFormItem, NInput,
-    NAlert, NCheckbox, NButton, NLayout, NLayoutContent, NForm,
-    FormRules, NGi
+    NAlert, NButton, NLayout, NForm,
+    FormRules, NGridItem,
+    NCheckbox,
+    NLayoutContent
 } from 'naive-ui'
 import { SHA512 } from 'crypto-js';
 import { ref, onMounted, onUnmounted, computed } from 'vue';

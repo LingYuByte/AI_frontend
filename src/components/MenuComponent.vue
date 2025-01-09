@@ -1,5 +1,5 @@
 <template>
-    <n-menu style="text-align: left;" v-model:value="activeKey" :collapsed="collapsed" :collapsed-width="64"
+    <NMenu style="text-align: left;" v-model:value="activeKey" :collapsed="collapsed" :collapsed-width="64"
         :collapsed-icon-size="22" :options="computedMenuOptions" @update:value="handleUpdateValue" />
 </template>
 

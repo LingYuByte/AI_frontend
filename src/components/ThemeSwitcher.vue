@@ -1,55 +1,54 @@
-cl<template>
+<template>
     <div class="container">
-        <n-divider>主题</n-divider>
+        <NDivider>主题</NDivider>
         <div class="theme-switch">
             <span style="margin-right: 10px;">手动</span>
-            <n-switch size="large" v-model:value="isAutoTheme" :checked-value="true" :unchecked-value="false">
+            <NSwitch size="large" v-model:value="isAutoTheme" :checked-value="true" :unchecked-value="false">
                 <template #checked>自动切换</template>
                 <template #unchecked>手动切换</template>
-            </n-switch>
+            </NSwitch>
             <span style="margin-left: 10px;">自动</span>
         </div>
         <div class="theme-switch" style="margin-top: 10px;" v-if="!isAutoTheme">
             <span style="margin-right: 10px;">亮色</span>
-            <n-switch size="large" v-model:value="isDarkTheme" :rail-style="railStyle" :checked-value="true"
+            <NSwitch size="large" v-model:value="isDarkTheme" :rail-style="railStyle" :checked-value="true"
                 :unchecked-value="false">
                 <template #checked-icon>
-                    <n-icon :component="Sparkles" color="#9f9f9c" />
+                    <NIcon :component="Sparkles" color="#9f9f9c" />
                 </template>
                 <template #unchecked-icon>
-                    <n-icon :component="Sunny" color="#E6A23C" />
+                    <NIcon :component="Sunny" color="#E6A23C" />
                 </template>
                 <template #checked>月映万川</template>
                 <template #unchecked>日照千里</template>
-            </n-switch>
+            </NSwitch>
             <span style="margin-left: 10px;">暗色</span>
         </div>
-        <n-divider>主题色</n-divider>
-        <n-color-picker v-model:value="primaryColor" :show-preview="true" />
+        <NDivider>主题色</NDivider>
+        <NColorPicker v-model:value="primaryColor" :show-preview="true" />
         <div class="preset-colors">
             <div v-for="color in presetColors" :key="color" :style="{ backgroundColor: color }" class="preset-color"
                 @click="setPresetColor(color)">
             </div>
         </div>
-        <n-flex vertical style="margin-top: 24px">
-            <n-flex justify="space-between" style="width: 200px">
+        <NFlex vertical style="margin-top: 24px">
+            <NFlex justify="space-between" style="width: 200px">
                 <span>RGB模式</span>
-                <n-switch size="large" v-model:value="isRGBMode" :checked-value="true" :unchecked-value="false" />
-            </n-flex>
-            <n-flex justify="space-between">
+                <NSwitch size="large" v-model:value="isRGBMode" :checked-value="true" :unchecked-value="false" />
+            </NFlex>
+            <NFlex justify="space-between">
                 <span>对话框模糊</span>
-                <n-switch size="large" v-model:value="isDialogBoxHairGlass" :checked-value="true"
+                <NSwitch size="large" v-model:value="isDialogBoxHairGlass" :checked-value="true"
                     :unchecked-value="false" />
-            </n-flex>
-        </n-flex>
+            </NFlex>
+        </NFlex>
     </div>
 </template>
-
 <script lang="ts" setup>
 import { CSSProperties, ref, watch } from 'vue';
 import { useThemeStore } from '@/stores/theme';
 import { Sparkles, Sunny } from '@vicons/ionicons5';
-
+import { NIcon, NColorPicker, NFlex, NSwitch } from 'naive-ui';
 const themeStore = useThemeStore();
 const isDarkTheme = ref(themeStore.theme === 'dark');
 const primaryColor = ref(themeStore.primaryColor);

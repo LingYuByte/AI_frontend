@@ -60,10 +60,11 @@ function sendMessage(value: string) {
     if (password) {
         request({
             method: 'post',
-            url: `/tts`,
+            url: `/ai/tts`,
             data: {
                 content: value,
-                voice: voice.value
+                voice: voice.value,
+                model: 'tts-1'
             },
             headers: {
                 Authorization: password

@@ -1,7 +1,6 @@
 import MarkdownIt from "markdown-it";
 import highlight from 'highlight.js/lib/core'
 import 'highlight.js/styles/atom-one-light.min.css'
-import katex, { MarkdownItKatexOptions } from '@iktakahiro/markdown-it-katex'
 import './style.css'
 import testtt from './1';
 const markdownit = new MarkdownIt({
@@ -14,28 +13,16 @@ const markdownit = new MarkdownIt({
                 return '<pre class="hljs"><code>' +
                     highlight.highlight(str, { language: lang, ignoreIllegals: true }).value +
                     '</code></pre>';
-            } catch (__) { return str }
+            } catch (e) { console.error(e);return str; }
         }
         else {
             return str;
         }
     }
 }).
-// use(katex,{
-//     // katexOptions: {
-//     //     throwOnError: false,
-//     //     displayMode: true,
-//     //     delimiters: [
-//     //         { left: "$$", right: "$$", display: true },
-//     //         { left: "\\[", right: "\\]", display: true },
-//     //         { left: "$", right: "$", display: true },
-//     //         { left: "\\(", right: "\\)", display: true }
-//     //     ]
-//     // }
-// } as MarkdownItKatexOptions)
 use(testtt);
-function render(value: string, _timer: number = 200, renderBlock?: any[]) {
-    console.log(value);
+function render(value: string, renderBlock?: (string | Element)[]) {
+    // console.log(value);
     const res = markdownit.render(value);
     const realRenderBlock:Element[] = [];
 

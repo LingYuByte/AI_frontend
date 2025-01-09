@@ -1,65 +1,74 @@
 <template>
-    <n-back-top :right="100" />
-    <n-flex vertical>
-        <n-card>
-            <n-space justify="space-between">
+    <NBackTop :right="100" />
+    <NFlex vertical>
+        <NAlert title="使用前提醒" type="warning" v-if="showWarning" closable v-on:close="closeWarning">
+            <span>
+                欢迎使用 LingYu Byte AI，
+                请先阅读 <a href="/price">价格说明</a>
+                ，了解使用限制和价格。
+                您可以在页面底部加入 QQ 交流群。
+            </span>
+        </NAlert>
+        <ImageEditor></ImageEditor>
+        <NCard>
+            <NSpace justify="space-between">
                 <div style="display: flex; align-items: center;">
-                    <n-avatar :size="65" round :style="{ display: isHidden ? 'none' : 'flex' }"
+                    <NAvatar :size="65" round :style="{ display: isHidden ? 'none' : 'flex' }"
                         src="https://www.loliapi.com/acg/pp/" />
                     <div :style="textStyle">
                         <h3 style="margin: 0;">{{ greeting }}</h3>
-                        <n-skeleton v-if="loadingTest" width="100%" style="margin-top: 8px" :sharp="false" text />
+                        <NSkeleton v-if="loadingTest" width="100%" style="margin-top: 8px" :sharp="false" text />
                         <p v-else style="margin: 0; margin-top: 4px;">{{ apiText }}</p>
                     </div>
                 </div>
-            </n-space>
-        </n-card>
-        <n-grid style="margin-top: 15px" cols="1 s:2 m:4" responsive="screen" :x-gap="15" :y-gap="20">
-            <n-gi v-for="(card, index) in cards" :key="index">
-                <n-card :style="cardStyle" :title="card.title" size="small">
-                    <n-flex justify="space-between" align="center">
-                        <n-icon size="32">
+            </NSpace>
+        </NCard>
+        <NGrid style="margin-top: 15px" cols="1 s:2 m:4" responsive="screen" :x-gap="15" :y-gap="20">
+            <NGridItem v-for="(card, index) in cards" :key="index">
+                <NCard :style="cardStyle" :title="card.title" size="small">
+                    <NFlex justify="space-between" align="center">
+                        <NIcon size="32">
                             <component :is="card.icon" />
-                        </n-icon>
-                        <n-statistic tabular-nums>
-                            <n-number-animation :from="0" :to="card.value" :precision="card.precision" />
+                        </NIcon>
+                        <NStatistic tabular-nums>
+                            <NNumberAnimation :from="0" :to="card.value" :precision="card.precision" />
                             <template v-if="card.suffix" #suffix>
                                 {{ card.suffix }}
                             </template>
-                        </n-statistic>
-                    </n-flex>
-                </n-card>
-            </n-gi>
-        </n-grid>
-        <n-grid style="margin-top: 15px" cols="24" responsive="screen" :x-gap="32" :y-gap="20">
-            <n-gi :span="12">
-                <n-card>
+                        </NStatistic>
+                    </NFlex>
+                </NCard>
+            </NGridItem>
+        </NGrid>
+        <NGrid style="margin-top: 15px" cols="24" responsive="screen" :x-gap="32" :y-gap="20">
+            <NGridItem :span="12">
+                <NCard>
                     <div v-if="loadingTrafficInfo">
-                        <n-skeleton text style="width: 40%" />
-                        <n-skeleton text :repeat="16" />
-                        <n-skeleton text style="width: 60%" />
+                        <NSkeleton text style="width: 40%" />
+                        <NSkeleton text :repeat="16" />
+                        <NSkeleton text style="width: 60%" />
                     </div>
                     <div v-else id="main" style="width: 100%; height: 400px;"></div>
-                </n-card>
-            </n-gi>
-            <n-gi :span="12">
-                <n-card>
+                </NCard>
+            </NGridItem>
+            <NGridItem :span="12">
+                <NCard>
                     <div v-if="loadingTrafficInfo">
-                        <n-skeleton text style="width: 40%" />
-                        <n-skeleton text :repeat="16" />
-                        <n-skeleton text style="width: 60%" />
+                        <NSkeleton text style="width: 40%" />
+                        <NSkeleton text :repeat="16" />
+                        <NSkeleton text style="width: 60%" />
                     </div>
                     <div v-else id="usage" style="width: 100%; height: 400px;"></div>
-                </n-card>
-            </n-gi>
-        </n-grid>
-    </n-flex>
+                </NCard>
+            </NGridItem>
+        </NGrid>
+    </NFlex>
 </template>
 
 <script lang="ts" setup>
 import { useScreenStore } from '@/stores/useScreen';
 import { storeToRefs } from 'pinia';
-import { useThemeVars, NSkeleton, NCard, NBackTop, NFlex, NGrid, NGi, NIcon, NStatistic, NNumberAnimation, NSpace, useMessage, NAvatar } from 'naive-ui';
+import { useThemeVars, NSkeleton, NCard, NBackTop, NFlex, NGrid, NGridItem, NIcon, NStatistic, NNumberAnimation, NSpace, useMessage, NAvatar, NAlert } from 'naive-ui';
 import { EChartsOption, init as Einit, graphic } from 'echarts';
 import { CheckmarkCircle } from '@vicons/ionicons5';
 // 根据主题自适应样式背景颜色
@@ -68,7 +77,12 @@ import { useStyleStore } from '@/stores/style';
 import { useUserStore } from '@/stores/user';
 import { computed, nextTick, onMounted, ref, shallowRef } from 'vue';
 import request from '@/utils/request';
-
+import ImageEditor from '@/components/ImageEditor.vue';
+const showWarning = ref(localStorage.getItem('closeWarning') === null ? true : false);
+function closeWarning() {
+    localStorage.setItem('closeWarning', 'true');
+    showWarning.value = false;
+}
 const userStore = useUserStore();
 onMounted(() => {
     userStore.loadUser();

@@ -1,20 +1,20 @@
 <template>
     <div class="product-list">
-        <n-card v-for="product in products" :key="product.id" :title="product.name" :bordered="false"
+        <NCard v-for="product in products" :key="product.id" :title="product.name" :bordered="false"
             class="product-card">
             <template #header-extra>
-                <n-tag>{{ product.stock }} 库存</n-tag>
+                <Ntag>{{ product.stock }} 库存</Ntag>
             </template>
-            <n-image width="100%" :src="(product.images??[])[0]" />
-            <n-p>价格：{{ product.price }} 元</n-p>
-            <n-button type="primary" @click="goToDetail(product.id)">立即购买</n-button>
-        </n-card>
+            <NImage width="100%" :src="(product.images??[])[0]" />
+            <NP>价格：{{ product.price }} 元</NP>
+            <NButton type="primary" @click="goToDetail(product.id)">立即购买</NButton>
+        </NCard>
     </div>
 </template>
 
 <script setup lang="ts">
 import { Ref, ref } from 'vue';
-import { NCard, NTag, NImage, NP, NButton } from 'naive-ui';
+import { NCard, NImage, NP, NButton } from 'naive-ui';
 import { useRouter } from 'vue-router';
 import request from '@/utils/request';
 

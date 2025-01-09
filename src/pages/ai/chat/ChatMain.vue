@@ -1,6 +1,6 @@
 <template>
-    <n-back-top :right="100" />
-    <n-card style="margin-bottom: 20px;height: 80vh" title="在线AI" :header-style="{
+    <NBackTop :right="100" />
+    <NCard style="margin-bottom: 20px;height: 80vh;min-height: 500px;" title="在线AI" :header-style="{
         padding: `10px 30px 5px`,
         fontSize: `larger`,
         fontWeight: `bold`,
@@ -16,30 +16,30 @@
                             :render-option="renderModelLabel" />
                     </NFlex>
                     <NFlex style="margin-top: 5px;">
-                        <n-tooltip>
+                        <NTooltip>
                             <template #trigger>
-                                <n-button>
-                                    <n-checkbox v-model:checked="useContext">使用上下文</n-checkbox>
-                                </n-button>
+                                <NButton>
+                                    <NCheckBox v-model:checked="useContext">使用上下文</NCheckBox>
+                                </NButton>
                             </template>
                             使用上下文后 ChatGPT 会分析以上全部消息，可能导致token消耗极快，请谨慎选择。
-                        </n-tooltip>
-                        <n-button @click="clearContext">清空上下文</n-button>
+                        </NTooltip>
+                        <NButton @click="clearContext">清空上下文</NButton>
                     </NFlex>
                 </NFlex>
             </NGridItem>
             <NGridItem v-if="!screenInfo.isHidden" span="1" style="height: 100%;">
                 <NDivider vertical style="width: 2.5px;height: 100%;--n-color:rgba(52,52,52,0.8);margin-left: 40%" />
             </NGridItem>
-            <NGridItem :span="screenInfo.isHidden ? 47 : (MenuOn.collapsed ? 38 : 34)" style="max-height: 70vh;">
+            <NGridItem :span="screenInfo.isHidden ? 47 : (MenuOn.collapsed ? 38 : 36)" style="max-height: 70vh;">
                 <ChatDetail v-model:messages="messages" v-model:use-context="useContext" :send-message="sendMessage" />
             </NGridItem>
         </NGrid>
-    </n-card>
+    </NCard>
 </template>
 
 <script lang="tsx" setup>
-import { NButton,NCard,NCheckbox, NGrid, NGridItem, NSelect, SelectOption, NTooltip, NBackTop, NDivider, useDialog, NFlex } from 'naive-ui'
+import { NButton,NCard, NGrid, NGridItem, NSelect, SelectOption, NTooltip, NBackTop, NDivider, useDialog, NFlex } from 'naive-ui'
 import { useUserStore } from '@/stores/user';
 import ChatDetail, { IMessages } from './chatDetail.vue';
 import * as uuid from 'uuid'
@@ -50,7 +50,522 @@ import { useScreenStore } from '@/stores/useScreen';
 import request from '@/utils/request';
 const userStore = useUserStore();
 const MenuOn = useLayoutStore();
-const messages: Ref<IMessages[]> = ref([]);
+const messages: Ref<IMessages[]> = ref([{
+    id: uuid.v7(),
+    role: "system",
+    content: `欢迎使用 LingYu_GPT\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    `
+}, {
+        id: uuid.v7(),
+        role: "user",
+        content: `欢迎使用 LingYu_GPT\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    a\n
+    `
+    }]);
 const themeStore = useThemeStore();
 const screenInfo = useScreenStore();
 const useContext = ref(false);
@@ -114,7 +629,6 @@ function sendMessage(value: string) {
         role: "assistant",
         content: ``
     })
-    console.log(sendMessages);
     if (password) {
         let offset = 0;
         request({
@@ -125,17 +639,13 @@ function sendMessage(value: string) {
                 messages: sendMessages
             },
             responseType: 'stream', onDownloadProgress: ({ event: xhr }) => {
-                // responseText 包含了从一开始到此刻的全部响应内容，所以我们需要从上次结束的位置截取，获得新增的内容
                 const { responseText } = xhr.target;
                 const chunk = responseText.substring(offset);
-                // 记录这一次的结束位置
                 offset = responseText.length;
                 s_queue += chunk;
             }
-        }).then((res) => {
-            console.log(res.data);
+        }).then(() => {
             endHandel = true;
-            console.log(111);
         }).catch((err) => {
             console.error(err);
         })
@@ -190,7 +700,7 @@ function clearContext() {
     });
 }
 </script>
-<style>
+<style lang="scss">
 #inputer .n-input-wrapper {
     resize: none;
     height: 100%;

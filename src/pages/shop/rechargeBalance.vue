@@ -2,17 +2,17 @@
     <NCard class="recharge-container" title="充值">
         <NGrid cols="24">
             <NGridItem span="13">
-                <n-form ref="formRef" :model="form"  style="width: 70%;">
-                    <n-form-item label="充值金额(最少0.1元)" path="amount">
+                <NForm ref="formRef" :model="form"  style="width: 70%;">
+                    <NFormItem label="充值金额(最少0.1元)" path="amount">
                         <NInputNumber v-model:value="form.amount" placeholder="最少 0.1 元" :precision="2" :min="0.1"/>
-                    </n-form-item>
-                    <n-form-item label="充值方式" path="paymentMethod">
-                        <n-select v-model:value="form.paymentMethod" :options="paymentOptions" placeholder="请选择充值方式" />
-                    </n-form-item>
-                    <n-form-item>
-                        <n-button type="primary" @click="handleRecharge">确认充值</n-button>
-                    </n-form-item>
-                </n-form>
+                    </NFormItem>
+                    <NFormItem label="充值方式" path="paymentMethod">
+                        <NSelect v-model:value="form.paymentMethod" :options="paymentOptions" placeholder="请选择充值方式" />
+                    </NFormItem>
+                    <NFormItem>
+                        <NButton type="primary" @click="handleRecharge">确认充值</NButton>
+                    </NFormItem>
+                </NForm>
             </NGridItem>
             <NGridItem span="9">
                 <h3>充值说明：</h3>
