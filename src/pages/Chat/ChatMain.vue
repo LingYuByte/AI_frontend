@@ -9,10 +9,24 @@
     }">
         <NGrid :cols="48" style="height: 99%;margin-top: 0.3%;">
             <NGridItem :span="screenInfo.isHidden ? 0 : (MenuOn.collapsed ? 9 : 11)" style="max-height: 70vh;">
-                <div>
-                    <h4>模型</h4>
-                    <NSelect v-model:value="model" :options="modelOptions" :render-option="renderModelLabel" />
-                </div>
+                <NFlex vertical align="center" justify="center" >
+                    <NFlex style="width: 90%;" vertical justify="center">
+                        <span style="font-size: larger;font-weight: 800;">选择模型：</span>
+                        <NSelect style="width: 100%;" v-model:value="model" :options="modelOptions"
+                            :render-option="renderModelLabel" />
+                    </NFlex>
+                    <NFlex style="margin-top: 5px;">
+                        <n-tooltip>
+                            <template #trigger>
+                                <n-button>
+                                    <n-checkbox v-model:checked="useContext">使用上下文</n-checkbox>
+                                </n-button>
+                            </template>
+                            使用上下文后 ChatGPT 会分析以上全部消息，可能导致token消耗极快，请谨慎选择。
+                        </n-tooltip>
+                        <n-button @click="clearContext">清空上下文</n-button>
+                    </NFlex>
+                </NFlex>
             </NGridItem>
             <NGridItem v-if="!screenInfo.isHidden" span="1" style="height: 100%;">
                 <NDivider vertical style="width: 2.5px;height: 100%;--n-color:rgba(52,52,52,0.8);margin-left: 40%" />
@@ -25,9 +39,7 @@
 </template>
 
 <script lang="tsx" setup>
-
-import { NCard, NGrid, NGridItem, NSelect, SelectOption, NTooltip, NBackTop, NDivider } from 'naive-ui'
-// 获取登录信息
+import { NButton,NCard,NCheckbox, NGrid, NGridItem, NSelect, SelectOption, NTooltip, NBackTop, NDivider, useDialog, NFlex } from 'naive-ui'
 import { useUserStore } from '@/stores/user';
 import ChatDetail, { IMessages } from './chatDetail.vue';
 import * as uuid from 'uuid'
@@ -36,23 +48,28 @@ import { useLayoutStore } from '@/stores/useLayout';
 import { useThemeStore } from '@/stores/theme';
 import { useScreenStore } from '@/stores/useScreen';
 import request from '@/utils/request';
-let userStore = useUserStore();
-let MenuOn = useLayoutStore();
-let messages: Ref<IMessages[]> = ref([]);
-let themeStore = useThemeStore();
-let screenInfo = useScreenStore();
-let useContext = ref(false);
-let pmt = ref(`你是一个学识渊博的专家，请回答用户的问题`);
+const userStore = useUserStore();
+const MenuOn = useLayoutStore();
+const messages: Ref<IMessages[]> = ref([]);
+const themeStore = useThemeStore();
+const screenInfo = useScreenStore();
+const useContext = ref(false);
+const dialog = useDialog();
+if (screenInfo.screenHeight < 600) {
+    dialog.error({
+        title: `屏幕尺寸过小`,
+        content: `屏幕尺寸过小，可能无法正常显示，建议屏幕`
+    })
+}
+
+const pmt = ref(`你是一个学识渊博的专家，请回答用户的问题`);
 function sendMessage(value: string) {
     let password = userStore.userInfo?.password;
-
     messages.value.push({
         id: uuid.v7(),
         role: "user",
         content: value
     });
-
-
     let s_queue = ``;
     let endHandel = false;
     let x = document.querySelector(`#messageView`)!;
@@ -156,6 +173,21 @@ function renderModelLabel({ node, option }: { node: VNode, option: SelectOption 
         trigger: () => node,
         default: () => `${option.explain ?? option.label}`
     })
+}
+
+function clearContext() {
+    dialog.warning({
+        title: `清空上下文`,
+        content: () => h(`span`, {
+            innerHTML: `确定清空上下文吗？清空后不可恢复`, style: `color:red`
+        }
+        ),
+        positiveText: `确定`,
+        negativeText: `取消`,
+        onPositiveClick: () => {
+            messages.value = [];
+        }
+    });
 }
 </script>
 <style>

@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { render } from '@/utils/MarkdownIt/markdown'
-import { NSplit, NGrid, NGridItem, NButton, NFlex, NCheckbox, NTooltip, useDialog } from 'naive-ui'
+import { NSplit, NGrid, NGridItem, NButton, NFlex } from 'naive-ui'
 import { useLayoutStore } from '@/stores/useLayout';
-import { h } from 'vue';
 import { useScreenStore } from '@/stores/useScreen';
 
 export interface IMessages {
@@ -17,114 +16,38 @@ let messages = defineModel<IMessages[]>('messages', {
     required: true,
     default: () => []
 })
-let useContext = defineModel<boolean>('useContext', {
-    required: true,
-    default: false
-})
+
 function send() {
     props.sendMessage((document.querySelector(`#messageInputer`) as HTMLDivElement).innerText);
     (document.querySelector(`#messageInputer`) as HTMLDivElement).innerHTML = ``;
 }
-
-const dialog = useDialog();
-function clearContext() {
-    dialog.warning({
-        title: `清空上下文`,
-        content: () => h(`span`, {
-            innerHTML: `确定清空上下文吗？情况后不可恢复`, style: `color:red`
-        }
-        ),
-        positiveText: `确定`,
-        negativeText: `取消`,
-        onPositiveClick: () => {
-            messages.value = [];
-        }
-    });
-}
-const layoutInfo = useLayoutStore();
 const screenStore = useScreenStore();
 </script>
 <template>
-    <div style="height: 100%;">
-        <NSplit style="height: 99%;" direction="vertical" :default-size="0.65" :max="0.85" :min="0.35">
-            <template #1>
-                <div id="messageView"
-                    style="overflow-y: auto;border-style:none none groove none;width: 99%;margin-left: auto;margin-right: auto;height: 100%;">
+    <n-split style="height: 99%;" direction="vertical" default-size="300px" :max="`${(screenStore.screenHeight * 0.7 - 150)}px`" min="150px">
+        <template #1>
+            <n-scrollbar>
+                <div id="messageView" class="message-view">
                     <div class="message-item" v-for="(item, index) of messages" :key="index">
-                        <div :class="item.role == `user` ? `message self` : `message other`">
-                            <div style="margin: 0px 5px;" class="message-block">
+                        <n-card :class="['message', item.role === 'user' ? 'self' : 'other']">
+                            <div class="message-block">
                                 <div :id="`message-${item.id}`" class="message-detail"
-                                    v-html="render(item.content, 900, [`#message-${item.id}`])">
-                                </div>
+                                    v-html="render(item.content, 900, [`#message-${item.id}`])"></div>
                             </div>
-                        </div>
+                        </n-card>
                     </div>
                 </div>
-                ::after
-            </template>
-            <template #2>
-                <NFlex v-if="screenStore.screenWidth <= 550" vertical>
-                    <div id="messageInputer" contenteditable="plaintext-only" style="flex: 1 1 1;">
-                    </div>
-                    <NFlex>
-                        <NButton type="primary" id="sendMessage" @click="send()">发送</NButton>
-                        <NTooltip>
-                            <template #trigger>
-                                <n-button>
-                                    <NCheckbox v-model:checked="useContext"> 使用上下文 </NCheckbox>
-                                </n-button>
-                            </template>
-                            使用上下文后 ChatGPT 会分析以上全部消息，可能导致token消耗极快，请谨慎选择。
-                        </NTooltip>
-
-                        <br>
-                        <NButton @click="clearContext">
-                            清空上下文
-                        </NButton>
-                    </NFlex>
-
-                </NFlex>
-                <NGrid v-else :cols="48" style="height: 100%;padding-left: 20px;padding-top: 1%;">
-                    <NGridItem :span="layoutInfo.collapsed ? 37 : 34">
-                        <div id="messageInputer" contenteditable="plaintext-only">
-                        </div>
-                    </NGridItem>
-                    <NGridItem :span="layoutInfo.collapsed ? 2 : 4">
-                    </NGridItem>
-                    <NGridItem :span="layoutInfo.collapsed ? 6 : 9">
-                        <NFlex>
-                            <NButton type="primary" id="sendMessage" @click="send()">发送</NButton>
-                            <br />
-
-                            <NTooltip>
-                                <template #trigger>
-                                    <n-button>
-                                        <NCheckbox v-model:checked="useContext"> 使用上下文 </NCheckbox>
-                                    </n-button>
-                                </template>
-                                使用上下文后 ChatGPT 会分析以上全部消息，可能导致token消耗极快，请谨慎选择。
-                            </NTooltip>
-
-                            <br>
-                            <NButton @click="clearContext">
-                                清空上下文
-                            </NButton>
-                        </NFlex>
-                    </NGridItem>
-                </NGrid>
-                <div class="layui-row">
-
-                    <div class="layui-col-lg10 layui-col-md10 layui-col-sm10" style="height: 100%;">
-
-                    </div>
-                    <div id="operators" class="layui-col-lg1 layui-col-md2 layui-col-sm2" style="height: 100%;">
-                    </div>
-                </div>
-            </template>
-        </NSplit>
-    </div>
+            </n-scrollbar>
+        </template>
+        <template #2>
+            <n-flex justify="center" align="center" :wrap="false" id="footer-flex">
+                <div id="messageInputer" contenteditable="plaintext-only" class="message-inputer"></div>
+                <n-button type="primary" id="sendMessage" @click="send()">发送</n-button>
+            </n-flex>
+        </template>
+    </n-split>
 </template>
-<style >
+<style>
 .message {
     width: auto;
     margin: 5px 5px 10px 5px;
@@ -190,18 +113,9 @@ const screenStore = useScreenStore();
     overflow: auto;
 }
 
-@media screen and (max-height:600px) {
-    #messageInputer {
-        height: 60%;
-        margin-top: 8%;
-    }
-}
 
 #sendMessage {
-    height: 30%;
-    width: 70%;
-    margin-left: 15%;
-    margin-top: 15%;
+    flex: 1 1 4rem;
     font-size: larger;
     font-weight: 600;
     max-height: 60px;
@@ -215,54 +129,6 @@ const screenStore = useScreenStore();
     margin-top: 10%;
     font-size: larger;
     font-weight: 600;
-}
-
-@media screen and (min-width:1200px) {
-    #operators {
-        margin-left: 40px;
-    }
-
-    #sendMessage {
-        height: 30%;
-        width: 95%;
-        margin-left: 2%;
-        margin-top: 15%;
-        font-size: larger;
-        font-weight: 600;
-    }
-
-    #previewMessage {
-        height: 30%;
-        width: 95%;
-        margin-left: 2%;
-        margin-top: 10%;
-        font-size: larger;
-        font-weight: 600;
-    }
-}
-
-@media screen and (min-width:600px) {
-    #operators {
-        margin-left: 40px;
-    }
-
-    #sendMessage {
-        height: 30%;
-        width: 95%;
-        margin-left: 2%;
-        margin-top: 15%;
-        font-size: larger;
-        font-weight: 600;
-    }
-
-    #previewMessage {
-        height: 30%;
-        width: 95%;
-        margin-left: 2%;
-        margin-top: 10%;
-        font-size: larger;
-        font-weight: 600;
-    }
 }
 </style>
 <style scoped>
@@ -309,4 +175,56 @@ const screenStore = useScreenStore();
     justify-content: center;
     align-items: center;
 }
+</style>
+
+<style lang="scss" scoped>
+.message-view {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    overflow-y: auto;
+
+    .message-item {
+        margin: 5px 0;
+        font-size: 16px;
+
+        .message {
+            max-width: 70%;
+            word-wrap: break-word;
+            border-radius: 10px;
+            overflow: hidden;
+
+            &.self {
+                align-self: flex-end;
+            }
+
+            &.other {
+                align-self: flex-start;
+            }
+
+            .message-block {
+                padding: 10px;
+
+            }
+        }
+    }
+}
+
+.message-inputer {
+    width: 80%;
+    min-height: 100px;
+    padding: 10px;
+    border: 1px solid #e8e8e8;
+    border-radius: 5px;
+    overflow: auto;
+    font-size: 16px;
+    line-height: 1.5;
+}
+#footer-flex
+{
+    height: 100%;
+}
+// 其他样式保持不变，根据需要调整
 </style>
