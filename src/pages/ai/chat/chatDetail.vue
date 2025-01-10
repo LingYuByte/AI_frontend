@@ -17,6 +17,9 @@ let messages = defineModel<IMessages[]>('messages', {
     required: true,
     default: () => []
 })
+setInterval(() => {
+    console.log(messages.value);
+    }, 5000)
 let containerRef = ref(document.body);
 onMounted(() => {
     containerRef.value = document.querySelector(`#container .n-scrollbar-container`) as HTMLDivElement;
@@ -48,7 +51,6 @@ const startSpeechInput = async () => {
             return;
         }
         document.getElementById('micBtn')?.classList.add('active');
-        console.log(isRecording.value);
         if (!isRecording.value) {
             audioStartInterval = setInterval(() => {
                 audioTime.value += 1;
@@ -114,7 +116,7 @@ const startSpeechInput = async () => {
                                             v-html="render(item.content, [`#message-${item.id}`])"></div>
                                     </NCard>
                                 </template>
-                                <template #default>
+                                <template>
                                     <div>
                                         <NButtonGroup>
                                             <NButton ghost>
@@ -278,10 +280,10 @@ const startSpeechInput = async () => {
     margin-left: 20px;
     flex: 1 1;
 }
-
+2
 .message-view {
-    width: 100%;
-    height: 100%;
+    width: 98%;
+    height: 98%;
     display: flex;
     flex-direction: column;
     padding: 10px;
@@ -297,7 +299,8 @@ const startSpeechInput = async () => {
         }
 
         .message-block {
-            width: 80%;
+            width: auto;
+            max-width: 70%;
         }
     }
 

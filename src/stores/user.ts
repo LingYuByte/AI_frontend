@@ -26,7 +26,7 @@ export const useUserStore = defineStore('user', () => {
         }
 
         userInfo.value = info;
-        userInfo.value!.userimg = info.userimg??`https://www.loliapi.com/acg/pp/`;
+        userInfo.value!.userimg = info.userimg ?? `https://www.loliapi.com/acg/pp/`;
     };
 
     const loadUser = () => {
@@ -47,20 +47,26 @@ export const useUserStore = defineStore('user', () => {
         sessionStorage.removeItem('userInfo');
     };
 
-    const checkUser = async (reload:boolean = false) => {
+    const checkUser = async (reload: boolean = false) => {
         let username = userInfo.value?.username;
-        let password = ((userInfo.value?.password)??``) as string;
-        const response = await axios.post(`${ip}/user/login`, {
-            username,
-            password: password.toLowerCase()
-        });
-        if (response.data.code === 200) {
-            if(reload)
-            {
-                setUser(response.data.data, 'permanent');
+        let password = ((userInfo.value?.password) ?? ``) as string;
+        try {
+            const response = await axios.post(`${ip}/user/login`, {
+                username,
+                password: password.toLowerCase()
+            });
+            if (response.data.code === 200) {
+                if (reload) {
+                    setUser(response.data.data, 'permanent');
+                }
+                return true;
+            } else {
+                clearUser();
+                return false;
             }
-            return true;
-        } else {
+        }
+        catch (error) {
+            console.log(error);
             clearUser();
             return false;
         }

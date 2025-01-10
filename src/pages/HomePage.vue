@@ -82,9 +82,7 @@ function closeWarning() {
     showWarning.value = false;
 }
 const userStore = useUserStore();
-onMounted(() => {
-    userStore.loadUser();
-})
+userStore.loadUser();
 const userInfo = userStore.userInfo;
 
 const loadingTest = ref(true)
@@ -92,7 +90,6 @@ const loadingTrafficInfo = ref(true)
 const message = useMessage();
 const styleStore = useStyleStore();
 const cardStyle = computed(() => styleStore.getCardStyle());
-console.log(userInfo?.balance);
 const cards = ref([
     {
         title: '总余额',
@@ -125,25 +122,25 @@ const currentTime = shallowRef(new Date());
 const greeting = computed(() => {
     const hour = currentTime.value.getHours();
     if (hour >= 0 && hour < 6) {
-        return `夜深了，${userInfo?.username}，夜晚依然静谧，但新的希望已经开始萌芽。`;
+        return `夜深了，${userInfo?.username??`旅行者` }，夜晚依然静谧，但新的希望已经开始萌芽。`;
     }
     else if (hour >= 6 && hour < 11) {
-        return `早上好，${userInfo?.username}，今天又是充满活力的一天。`;
+        return `早上好，${userInfo?.username??`旅行者`}，今天又是充满活力的一天。`;
     }
     else if (hour >= 11 && hour < 14) {
-        return `中午好，${userInfo?.username}，享受这温暖的阳光和美味的午餐吧。`;
+        return `中午好，${userInfo?.username??`旅行者`}，享受这温暖的阳光和美味的午餐吧。`;
     }
     else if (hour >= 14 && hour < 15) {
-        return `饮茶先啦，${userInfo?.username}，做那么多都没用的，老板不会喜欢你的，喂喝一下茶先吧`;
+        return `饮茶先啦，${userInfo?.username??`旅行者`}，做那么多都没用的，老板不会喜欢你的，喂喝一下茶先吧`;
     }
     else if (hour >= 15 && hour < 17) {
-        return `下午好，${userInfo?.username}，午后的时光总是最适合专注与思考。`;
+        return `下午好，${userInfo?.username??`旅行者`}，午后的时光总是最适合专注与思考。`;
     }
     else if (hour >= 17 && hour < 22) {
-        return `晚上好，${userInfo?.username}，夜幕降临，是时候享受片刻宁静了。`;
+        return `晚上好，${userInfo?.username??`旅行者`}，夜幕降临，是时候享受片刻宁静了。`;
     }
     else {
-        return `少熬夜，${userInfo?.username}，愿你有一个宁静而甜美的梦境。`;
+        return `少熬夜，${userInfo?.username??`旅行者`}，愿你有一个宁静而甜美的梦境。`;
     }
 });
 
@@ -179,7 +176,6 @@ const trafficInfo = async () => {
         loadingTrafficInfo.value = false;
         const { useInfos, count }: { useInfos: IUseInfo[], count: number } = res.data.collection;
         cards.value[1].value = count;
-        console.log(useInfos);
         await nextTick();
         updateChart(groupAndSummarize(useInfos));
 

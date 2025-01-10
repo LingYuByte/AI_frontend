@@ -111,11 +111,6 @@ const baseMenuOptions: MenuMixedOption[] = [
                 label: () => h(RouterLink, { to: { name: 'recharge' } }, { default: () => '充值' }),
                 key: 'recharge',
                 icon: renderIcon(CashOutline)
-            },
-            {
-                label: () => h(RouterLink, { to: { name: 'cartCheckOut' } }, { default: () => '结算' }),
-                key: 'cartCheckOut',
-                icon: renderIcon(CashOutline)
             }
         ]
     },

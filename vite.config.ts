@@ -19,7 +19,6 @@ export default defineConfig({
 
                     }
                     else {
-                        console.log(id);
                         if (id.includes(__dirname)) {
                             return id.toString().split(__dirname)[1].split('?')[0].toString().replace(/\//g, `_`);
                         }

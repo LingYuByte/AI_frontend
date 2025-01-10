@@ -115,10 +115,11 @@ function sendMessage(value: string) {
         content: ``
     })
     if (password) {
+        console.log(sendMessages);
         let offset = 0;
         request({
             method: 'post',
-            url: `/chat`,
+            url: `/ai/chat`,
             data: {
                 model: model.value,
                 messages: sendMessages
@@ -156,8 +157,12 @@ let modelOptions = ref([
         explain: `比 gpt3.5 贵，能用图片，质量略高于3.5`
     }
 ])
-request.post(`/getModels`).then((data) => {
-    modelOptions.value = data.data.data.filter((e) => { return e.type === 'chat' && e.available }).map((e) => {
+request.get(`/model/user`).then((res) => {
+    modelOptions.value = res.data.data.map((e) => {
+        return { ...e.dataValues, available: e.available }
+    }).filter((e) => {
+        return e.type === 'chat' && e.available
+    }).map((e) => {
         return { label: e.name, value: e.name, explain: e.description }
     })
 })

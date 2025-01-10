@@ -23,7 +23,6 @@ function send() {
 let layoutInfo = useLayoutStore();
 let audio = new Audio();
 function Play(url: string) {
-    console.log(url);
     // audio.pause();
     audio.src = url;
     audio.play();

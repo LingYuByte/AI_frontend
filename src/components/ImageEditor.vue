@@ -76,10 +76,8 @@ function setupCanvas() {
     // canvasWidth.value = widthCalc * img.width;
     // canvasHeight.value = heightCalc * img.height;
     scale.value = widthCalc > heightCalc ? canvasWidth.value / img.width : canvasHeight.value / img.height;
-    console.log(img.width, img.height, scale.value);
     canvasWidth.value = img.width;
     canvasHeight.value = img.height;
-    console.log(canvasWidth.value, canvasHeight.value);
     // 创建主画布
     mainCanvas = document.createElement('canvas');
     mainCanvas.width = canvasWidth.value;
@@ -137,19 +135,15 @@ function drawImageWithTransform() {
     mainCtx.translate(translateX.value, translateY.value);
     mainCtx.rotate(rotationAngle.value);
     // mainCtx.scale(scale.value, scale.value);
-    console.log(img.width, img.height, scale.value);
     mainCtx.drawImage(img, 0, 0);
     mainCtx.restore();
 
     // 绘制蒙版
     if (maskCtx) {
-        console.log(img.width, img.height);
         maskCtx.save();
-        console.log(mainCtx.getTransform());
         maskCtx.translate(translateX.value, translateY.value);
         // maskCtx.setTransform(mainCtx.getTransform());
         maskCtx.globalAlpha = 0.8;
-        console.log(maskCtx);
         maskCtx.fillStyle = 'gray';
         if (!flag) {
             maskCtx.fillRect(0, 0, 10000, 10000);

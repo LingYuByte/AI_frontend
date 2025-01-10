@@ -36,7 +36,6 @@ async function makeEdit(data: [Blob, Blob | null]) {
         }
     }
     catch (err) {
-        console.log(err);
         notify.create({
             type: 'error',
             content: `发生错误，请稍后再试`,

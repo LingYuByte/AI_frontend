@@ -55,7 +55,6 @@ const useRectify = ref(true);
 const rectifyModel = ref('gpt-3.5-turbo-ca');
 const models = ref([]);
 request.get(`/model/user`).then((res) => {
-    console.log(res.data.data);
     models.value = res.data.data.map((e) => {
         return { ...e.dataValues, available: e.available }
     }).filter((e) => {

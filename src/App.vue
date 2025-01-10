@@ -22,8 +22,11 @@ onMounted(() => {
         if (res === false) {
             useMessage().error("登录验证失败，请重新登录");
         }
-    })
+    }).catch(() => {
+        useMessage().error("登录验证失败，请重新登录");
+    });
 });
+
 
 // 获取当前年份
 const currentDate = new Date();

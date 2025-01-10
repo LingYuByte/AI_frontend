@@ -35,7 +35,6 @@ const panelRef = ref<HTMLDivElement | null>(null);
 const panelPosition = ref({ left: '0px', top: '0px' });
 
 const showPanel = async () => {
-    console.log('showPanel');
     isOpen.value = true;
     await nextTick();
     if (targetRef.value && panelRef.value) {
@@ -43,7 +42,6 @@ const showPanel = async () => {
         const { offsetWidth: panelWidth, offsetHeight: panelHeight } = panelRef.value;
         panelPosition.value.left = `${left - (panelWidth - width) / 2}px`;
         panelPosition.value.top = `${top - panelHeight - 10}px`; // 10是间距
-        console.log(panelPosition.value);
     }
 };
 
@@ -70,7 +68,6 @@ const startDrag = (e: MouseEvent) => {
 
 const dragPanel = (e: MouseEvent) => {
     if (isDragging.value) {
-        console.log('dragging...');
         panelPosition.value.left = `${e.clientX - initialMouseX.value + initialPanelLeft.value}px`;
         panelPosition.value.top = `${initialPanelTop.value + e.clientY - initialMouseY.value}px`;
     }

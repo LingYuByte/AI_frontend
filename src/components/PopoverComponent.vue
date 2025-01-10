@@ -70,7 +70,7 @@ const setPopoverPosition = () => {
 </script>
 <template>
     <div id="popover-target" ref="popover-target">
-        <slot name="traget"></slot>
+        <slot name="target"></slot>
     </div>
     <NCard id="popover-content" v-if="isShow" :style="popoverStyle">
         <slot></slot>
