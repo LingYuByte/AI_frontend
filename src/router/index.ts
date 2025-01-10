@@ -45,14 +45,44 @@ const routes: Array<RouteRecordRaw> = [
                 },
             },
             {
-                path: "image",
-                name: "ai-image",
+                path: "image/edit",
+                name: "ai-image-edit",
                 component: () => import('@/pages/ai/image/imageEdit.vue'),
                 meta: {
                     title: '图片编辑 - LingYu Byte AI',
-                    keywords: 'LingYu Byte AI, TTS, Text to Speech, 图片, 图片编辑',
+                    keywords: 'LingYu Byte AI, 图片, 图片编辑, Pictures, Pictures Edit',
                     requiresAuth: true,
                 },
+            },
+            {
+                path: "image/create",
+                name: "ai-image-create",
+                component: () => import('@/pages/ai/image/imageEdit.vue'),
+                meta: {
+                    title: 'AI 文生图 - LingYu Byte AI',
+                    keywords: 'LingYu Byte AI, 图片, 文生图, AI 文生图, AI Art',
+                    requiresAuth: true,
+                },
+            },
+            {
+                path: "image/redraw",
+                name: "ai-image-redraw",
+                component: () => import('@/pages/ai/image/imageEdit.vue'),
+                meta: {
+                    title: 'AI 重绘图 - LingYu Byte AI',
+                    keywords: 'LingYu Byte AI, 图片, 图片重绘, AI redraw, AI Art',
+                    requiresAuth: true,
+                },
+            },
+            {
+                path: "audio/transcription",
+                name: "ai-audio-transcription",
+                component: () => import('@/pages/ai/audio/transcription.vue'),
+            },
+            {
+                path: "audio/translation",
+                name: "ai-audio-translation",
+                component: () => import('@/pages/ai/audio/translation.vue'),
             }
         ]
     },

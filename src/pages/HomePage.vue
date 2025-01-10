@@ -9,7 +9,6 @@
                 您可以在页面底部加入 QQ 交流群。
             </span>
         </NAlert>
-        <ImageEditor></ImageEditor>
         <NCard>
             <NSpace justify="space-between">
                 <div style="display: flex; align-items: center;">
@@ -77,7 +76,6 @@ import { useStyleStore } from '@/stores/style';
 import { useUserStore } from '@/stores/user';
 import { computed, nextTick, onMounted, ref, shallowRef } from 'vue';
 import request from '@/utils/request';
-import ImageEditor from '@/components/ImageEditor.vue';
 const showWarning = ref(localStorage.getItem('closeWarning') === null ? true : false);
 function closeWarning() {
     localStorage.setItem('closeWarning', 'true');

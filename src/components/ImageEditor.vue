@@ -1,8 +1,16 @@
 <template>
     <NFlex vertical align="center" justify="center">
-        <n-upload v-model:file-list="list" @change="handleFileChange" accept=".png" :multiple="false">
-            <n-button>上传图片</n-button>
-        </n-upload>
+        <NFlex :wrap="false">
+            <n-upload v-model:file-list="list" @change="handleFileChange" accept=".png" :multiple="false">
+                <n-button>上传图片</n-button>
+            </n-upload>
+            <n-button @click="toggleMask">切换蒙版</n-button>
+            <n-button v-if="routeAble" @click="rotateImage">旋转</n-button>
+            <n-slider v-if="resizAble" v-model:value="scale" :min="0.1" :max="2" :step="0.02" style="width: 100%;" />
+            <div @click="exportImage">
+                <n-button>导出</n-button>
+            </div>
+        </NFlex>
         <div style="overflow:scroll;max-width: 100%;max-height: 60vh;">
             <div ref="canvasContainer" class="canvas-container" :style="{
                 width: `${canvasWidth}px`,
@@ -11,14 +19,6 @@
             </div>
             <!-- 主画布和蒙版画布将在这里被创建 -->
         </div>
-        <NFlex style="width: 40%;" align="center" justify="center">
-            <n-button @click="toggleMask">切换蒙版</n-button>
-            <n-button v-if="routeAble" @click="rotateImage">旋转</n-button>
-            <n-slider v-if="resizAble" v-model:value="scale" :min="0.1" :max="2" :step="0.02" style="width: 100%;" />
-            <div @click="exportImage">
-                <n-button>导出</n-button>
-            </div>
-        </NFlex>
     </NFlex>
 </template>
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { render } from '@/utils/MarkdownIt/markdown'
-import { NSplit, NButton, NIcon, NFlex, NInput, NCard, NScrollbar, NPopover, NButtonGroup } from 'naive-ui'
+import { NSplit, NButton, NIcon, NFlex, NInput, NCard, NScrollbar, NButtonGroup } from 'naive-ui'
 import { useScreenStore } from '@/stores/useScreen';
 import { onMounted, ref, watch } from 'vue';
 import popover from '@/components/PopoverComponent.vue'
