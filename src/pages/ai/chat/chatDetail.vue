@@ -280,7 +280,6 @@ const startSpeechInput = async () => {
     margin-left: 20px;
     flex: 1 1;
 }
-2
 .message-view {
     width: 98%;
     height: 98%;
