@@ -162,6 +162,7 @@ router.beforeEach((to, _from, next) => {
     useProviderStore().loadingBar?.start();
 
     const userStore = useUserStore();
+    userStore.loadUser();
     const isAuthenticated = !!userStore.userInfo; // 检查是否存在用户信息
 
     if (to.meta.requiresAuth && !isAuthenticated) {

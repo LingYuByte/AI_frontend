@@ -84,7 +84,6 @@ function closeWarning() {
 const userStore = useUserStore();
 userStore.loadUser();
 const userInfo = userStore.userInfo;
-
 const loadingTest = ref(true)
 const loadingTrafficInfo = ref(true)
 const message = useMessage();

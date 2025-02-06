@@ -29,10 +29,9 @@ export default defineConfig({
         },
     },
     plugins: [vue(), vueJsx()],
-    base: `./`,
+    base: `/`,
     resolve: {
         alias: {
-            '@ui': '/src/ui/src',
             '@': '/src',
             '~': '/src',
         }
