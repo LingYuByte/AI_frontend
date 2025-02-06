@@ -19,7 +19,7 @@
                         <NTooltip>
                             <template #trigger>
                                 <NButton>
-                                    <NCheckBox v-model:checked="useContext">使用上下文</NCheckBox>
+                                    <NCheckbox v-model:checked="useContext">使用上下文</NCheckBox>
                                 </NButton>
                             </template>
                             使用上下文后 ChatGPT 会分析以上全部消息，可能导致token消耗极快，请谨慎选择。
@@ -39,7 +39,7 @@
 </template>
 
 <script lang="tsx" setup>
-import { NButton,NCard, NGrid, NGridItem, NSelect, SelectOption, NTooltip, NBackTop, NDivider, useDialog, NFlex } from 'naive-ui'
+import { NButton,NCard, NGrid, NGridItem, NSelect, SelectOption, NTooltip, NBackTop, NDivider, useDialog, NFlex, NCheckbox } from 'naive-ui'
 import { useUserStore } from '@/stores/user';
 import ChatDetail, { IMessages } from './chatDetail.vue';
 import * as uuid from 'uuid'
@@ -50,7 +50,12 @@ import { useScreenStore } from '@/stores/useScreen';
 import request from '@/utils/request';
 const userStore = useUserStore();
 const MenuOn = useLayoutStore();
-const messages: Ref<IMessages[]> = ref([]);
+const messages: Ref<IMessages[]> = ref([
+{
+    id: "1",
+    content: "2",
+    role: "user"
+}]);
 const themeStore = useThemeStore();
 const screenInfo = useScreenStore();
 const useContext = ref(false);

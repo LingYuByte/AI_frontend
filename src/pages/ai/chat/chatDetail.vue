@@ -111,7 +111,7 @@ const startSpeechInput = async () => {
                         <div class="message-block">
                             <popover :container="containerRef" :position="item.role === 'user' ? 'left' : 'right'">
                                 <template #target>
-                                    <NCard hoverable>
+                                    <NCard hoverable content-style="padding: 3px 15px;">
                                         <div :id="`message-${item.id}`" class="message-detail"
                                             v-html="render(item.content, [`#message-${item.id}`])"></div>
                                     </NCard>
@@ -287,7 +287,10 @@ const startSpeechInput = async () => {
     flex-direction: column;
     padding: 10px;
     overflow-y: auto;
-
+    
+    .n-card__content {
+        padding: 1px !important;
+    }
     .message-item {
         margin: 5px 0;
         font-size: 16px;
@@ -315,7 +318,6 @@ const startSpeechInput = async () => {
         .n-card {
             background-color: rgb(255, 208, 251);
         }
-
         .message {
             max-width: 70%;
             word-wrap: break-word;
